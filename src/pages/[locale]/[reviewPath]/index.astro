@@ -57,7 +57,7 @@ const alternates = alternateHrefs((l) => `/${l.code}/${l.paths.reviews}/`);
       <ul class="divide-y divide-hairline">
         {reviews.map((r) => {
           const c = requireCasino(r.data.casino);
-          const href = `/${locale.code}/${locale.paths.reviews}/${r.data.slug}/`;
+          const href = `/${locale.code}/${locale.paths.reviews}/${r.slug}/`;
           return (
             <li class="py-8 grid md:grid-cols-[80px_1fr_auto] items-center gap-6">
               <img src={c.logo} alt=""

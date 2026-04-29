@@ -38,7 +38,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
         params: {
           locale: locale.code,
           reviewPath: locale.paths.reviews,
-          slug: review.data.slug,
+          slug: review.slug,
         },
         props: { review },
       });
@@ -52,7 +52,7 @@ const { review } = Astro.props as { review: CollectionEntry<'reviews'> };
 const locale = localeByCode(String(localeCode)) ?? defaultLocale();
 const t = withLocale(locale.code);
 
-const fm = review.data;
+const fm = { ...review.data, slug: review.slug };
 const casino = requireCasino(fm.casino);
 
 // Cross-locale alternates: every locale that has a review for this casino.
@@ -63,7 +63,7 @@ for (const r of allReviews) {
 }
 const alternates = alternateHrefs((l: Locale) => {
   const r = reviewsByLocale.get(l.code);
-  return r ? `/${l.code}/${l.paths.reviews}/${r.data.slug}/` : undefined;
+  return r ? `/${l.code}/${l.paths.reviews}/${r.slug}/` : undefined;
 });
 
 const path = `/${locale.code}/${locale.paths.reviews}/${fm.slug}/`;

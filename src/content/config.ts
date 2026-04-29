@@ -41,7 +41,6 @@ const reviews = defineCollection({
   schema: z.object({
     casino:            z.string().regex(/^[a-z0-9-]+$/),
     locale:            z.string().min(2),
-    slug:              z.string().regex(/^[a-z0-9-]+$/),
     title:             z.string().min(1),
     meta_title:        z.string().min(1),
     meta_description:  z.string().min(50).max(180),
@@ -61,7 +60,6 @@ const blog = defineCollection({
   type: 'content',
   schema: z.object({
     locale:            z.string().min(2),
-    slug:              z.string().regex(/^[a-z0-9-]+$/),
     title:             z.string().min(1),
     meta_title:        z.string().min(1),
     meta_description:  z.string().min(50).max(180),

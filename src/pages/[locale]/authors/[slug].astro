@@ -87,7 +87,7 @@ const url = `${SITE_URL}/${locale.code}/authors/${author.slug}/`;
           <ul class="divide-y divide-hairline">
             {reviews.map((r) => {
               const rl = allLocales().find((l) => l.code === r.data.locale);
-              const href = rl ? `/${rl.code}/${rl.paths.reviews}/${r.data.slug}/` : '#';
+              const href = rl ? `/${rl.code}/${rl.paths.reviews}/${r.slug}/` : '#';
               return (
                 <li class="py-5 grid md:grid-cols-[1fr_auto_auto] gap-2 md:gap-6 items-baseline">
                   <a href={href} class="font-display text-xl text-bone hover:underline decoration-ribbon underline-offset-4">
