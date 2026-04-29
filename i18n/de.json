@@ -1,0 +1,79 @@
+{
+  "meta.site_name": "VegasHunter",
+  "meta.tagline": "Online-Casinos, gejagt und bewertet seit 2026.",
+
+  "nav.home": "Start",
+  "nav.reviews": "Bewertungen",
+  "nav.rankings": "Rankings",
+  "nav.blog": "Blog",
+  "nav.about": "Über uns",
+  "nav.contact": "Kontakt",
+  "nav.toggle_menu": "Menü umschalten",
+
+  "header.skip_to_content": "Zum Hauptinhalt springen",
+
+  "footer.disclosure": "VegasHunter wird von seinen Lesern unterstützt. Wir können eine Provision erhalten, wenn Sie sich über Links auf dieser Seite bei einem Casino anmelden. Dies hat keinerlei Einfluss auf unsere redaktionelle Bewertung oder unser Ranking — jedes Urteil ist das Ergebnis unabhängiger Beobachtung, niemals bezahlter Platzierung.",
+  "footer.responsible_gambling": "Verantwortungsvolles Spielen",
+  "footer.privacy_policy": "Datenschutz",
+  "footer.terms": "AGB",
+  "footer.about": "Über uns",
+  "footer.contact": "Kontakt",
+  "footer.methodology": "Methodologie",
+  "footer.copyright": "© {year} VegasHunter. Alle Rechte vorbehalten.",
+  "footer.languages": "Sprachen",
+  "footer.age_warning": "18+ — Glücksspiel kann süchtig machen. Spielen Sie verantwortungsbewusst. Setzen Sie nie mehr ein, als Sie sich leisten können zu verlieren.",
+
+  "common.read_more": "Mehr lesen",
+  "common.read_review": "Bewertung lesen",
+  "common.visit_casino": "Zum Casino",
+  "common.continue_reading": "Weiterlesen",
+  "common.score": "Bewertung",
+  "common.bonus": "Bonus",
+  "common.last_updated": "Zuletzt aktualisiert",
+  "common.published": "Veröffentlicht",
+  "common.reviewed_by": "Bewertet von",
+  "common.min_read": "{min} Min. Lesezeit",
+
+  "region_blocked.heading": "Service in Ihrer Region nicht verfügbar",
+  "region_blocked.body": "VegasHunter ist in Ihrem Land derzeit nicht verfügbar. Wir entschuldigen uns für die Unannehmlichkeiten. Sollte dies ein Fehler sein, kontaktieren Sie uns bitte.",
+  "region_blocked.detected_country": "Erkanntes Land: {country}",
+  "region_blocked.contact": "Kontakt",
+
+  "cookie.message": "Wir verwenden Cookies, um zu verstehen, wie Besucher VegasHunter nutzen und um unsere redaktionelle Berichterstattung zu verbessern. Sie können alle akzeptieren, nicht-essentielle ablehnen oder die Einstellungen öffnen.",
+  "cookie.accept_all": "Alle akzeptieren",
+  "cookie.decline": "Nicht-essentielle ablehnen",
+  "cookie.settings": "Cookie-Einstellungen",
+  "cookie.heading": "Cookies auf VegasHunter",
+
+  "rg.statement": "Glücksspiel ist mit Risiko verbunden. Wenn das Spielen keinen Spaß mehr macht, machen Sie eine Pause.",
+  "rg.helplines": "Hilfetelefone: BZgA (DE) · BeGambleAware · GamCare · Spielsucht-Hilfe (AT)",
+
+  "placeholder.coming_soon": "Diese Seite folgt in Kürze.",
+  "placeholder.under_construction": "Im Aufbau.",
+
+  "a11y.language_switcher": "Sprache wechseln",
+  "a11y.close": "Schließen",
+  "a11y.menu": "Menü",
+
+  "error_404.heading": "Seite nicht gefunden",
+  "error_404.body": "Die gesuchte Seite konnte nicht gefunden werden.",
+  "error_404.go_home": "Zur Startseite",
+
+  "page.about.heading": "Über VegasHunter",
+  "page.about.lead": "VegasHunter ist ein redaktionelles Verzeichnis von Online-Casinos. Jede Bewertung ist das Ergebnis geduldiger Beobachtung, niemals bezahlter Platzierung.",
+
+  "page.contact.heading": "Kontakt",
+  "page.contact.body": "Für redaktionelle Anfragen, Partnerschaftsanfragen oder Feedback schreiben Sie uns unter {email}.",
+
+  "page.methodology.heading": "Wie wir Casinos bewerten",
+  "page.methodology.lead": "Unsere Bewertungsmethode, die Kategorien, die wir messen, die Gewichtungen, die wir anwenden, und die Dinge, die wir nicht messen.",
+
+  "page.privacy.heading": "Datenschutzerklärung",
+  "page.privacy.body_placeholder": "Unsere vollständige Datenschutzerklärung wird vor dem Live-Gang der Seite veröffentlicht. Bis dahin sammeln wir auf dieser Seite keine personenbezogenen Daten über Standard-Serverlogs hinaus.",
+
+  "page.terms.heading": "Nutzungsbedingungen",
+  "page.terms.body_placeholder": "Unsere vollständigen Nutzungsbedingungen werden vor dem Live-Gang der Seite veröffentlicht.",
+
+  "page.responsible_gambling.heading": "Verantwortungsvolles Spielen",
+  "page.responsible_gambling.lead": "Glücksspiel kann süchtig machen. Setzen Sie sich Limits. Machen Sie Pausen. Wenn Sie Hilfe brauchen, sind die folgenden Hilfetelefone rund um die Uhr erreichbar."
+}

@@ -1,0 +1,128 @@
+{
+  "$schema": "vegashunter-press-ledger-v0.2",
+  "meta": {
+    "name": "VegasHunter — Press Ledger",
+    "version": "0.2.0",
+    "supersedes": "0.1.0 (Phosphor Ledger)",
+    "date": "2026-04-27",
+    "description": "Design tokens for VegasHunter.pro. Editorial publication system. Drop into Tailwind config (theme.extend) or use directly as CSS variables."
+  },
+
+  "color": {
+    "ink":       { "value": "#0B0A10", "role": "page background — deep, warm black" },
+    "dusk":      { "value": "#14111C", "role": "panel surface — cards, sections" },
+    "twilight":  { "value": "#1F1A2A", "role": "raised surface — interactive cards, hover" },
+    "hairline":  { "value": "#2D2640", "role": "divider, hairline border" },
+    "mute":      { "value": "#5F567A", "role": "disabled / tertiary text / labels" },
+    "silver":    { "value": "#B3AAC3", "role": "secondary text / dek / metadata" },
+    "bone":      { "value": "#F4EFE2", "role": "primary text on dark, warm white" },
+
+    "ribbon":    { "value": "#FF2D7A", "role": "signature accent — magenta tick, CTA fill, drop-cap underline. Used sparingly. Never as a wash or glow." },
+    "gold":      { "value": "#C5A572", "role": "restraint accent — premium chip / verified badge edge / featured marker. Sparingly." },
+
+    "ivy":       { "value": "#2F6B4F", "role": "positive / verified / passed audit" },
+    "amber":     { "value": "#D89A4A", "role": "caution / new / attention" },
+    "crimson":   { "value": "#B33A3A", "role": "blacklisted / inactive / error" }
+  },
+
+  "font": {
+    "display":   { "family": "Gloock",                "weights": [400],          "role": "wordmark, headlines, drop caps. Mixed-case." },
+    "body":      { "family": "Bricolage Grotesque",   "weights": [400, 700],     "role": "paragraphs, UI labels, captions. Humanist sans." },
+    "mono":      { "family": "JetBrains Mono",        "weights": [400, 700],     "role": "scores, RTPs, timestamps, codes, small-caps mono labels." },
+    "italic":    { "family": "Crimson Pro",           "weights": [400], "italic": true, "role": "rare pull quotes, deks, bylines, dedications." }
+  },
+
+  "type": {
+    "scale": {
+      "xs":   { "size": "12px", "lineHeight": "16px", "letterSpacing": "0.04em" },
+      "sm":   { "size": "14px", "lineHeight": "20px", "letterSpacing": "0.02em" },
+      "base": { "size": "16px", "lineHeight": "26px" },
+      "lg":   { "size": "18px", "lineHeight": "28px" },
+      "xl":   { "size": "22px", "lineHeight": "32px" },
+      "2xl":  { "size": "28px", "lineHeight": "36px" },
+      "3xl":  { "size": "36px", "lineHeight": "44px" },
+      "4xl":  { "size": "48px", "lineHeight": "56px" },
+      "5xl":  { "size": "64px", "lineHeight": "72px" },
+      "headline": { "size": "88px", "lineHeight": "92px" },
+      "wordmark": { "size": "200px", "lineHeight": "200px" }
+    },
+    "letterSpacing": {
+      "wordmark":    "0",
+      "monoCaps":    "0.18em",
+      "bodyDefault": "0",
+      "bodyTight":   "-0.005em"
+    }
+  },
+
+  "space": {
+    "0": "0px",
+    "1": "4px",
+    "2": "8px",
+    "3": "12px",
+    "4": "16px",
+    "5": "20px",
+    "6": "24px",
+    "8": "32px",
+    "10": "40px",
+    "12": "48px",
+    "16": "64px",
+    "20": "80px",
+    "24": "96px",
+    "32": "128px"
+  },
+
+  "radius": {
+    "none": "0px",
+    "sm":   "4px",
+    "md":   "8px",
+    "lg":   "12px",
+    "xl":   "16px",
+    "2xl":  "24px",
+    "pill": "9999px"
+  },
+
+  "border": {
+    "hairline":   "1px solid #2D2640",
+    "ribbonTick": "2px solid #FF2D7A"
+  },
+
+  "shadow": {
+    "card":  "0 1px 0 rgba(45,38,64,0.4), 0 0 0 1px #2D2640",
+    "ctaHover": "0 0 0 4px rgba(255,45,122,0.18)"
+  },
+
+  "motion": {
+    "instant": "0ms",
+    "fast":    "120ms ease-out",
+    "default": "200ms cubic-bezier(0.2, 0.8, 0.2, 1)",
+    "slow":    "320ms cubic-bezier(0.2, 0.8, 0.2, 1)"
+  },
+
+  "breakpoints": {
+    "sm":  "480px",
+    "md":  "768px",
+    "lg":  "1024px",
+    "xl":  "1280px",
+    "2xl": "1536px"
+  },
+
+  "performanceBudget": {
+    "lcp":           "<= 2.5s",
+    "inp":           "<= 200ms",
+    "cls":           "<= 0.1",
+    "jsFirstLoad":   "<= 100KB",
+    "cssTotal":      "<= 50KB",
+    "imagePerAsset": "<= 100KB"
+  },
+
+  "principles": [
+    "The wordmark earns the page — no ornament shares its top billing.",
+    "Magenta is a tick, not a wash — used as a notch, rule, or button.",
+    "The rule organizes the page — hairlines mean section, department, division.",
+    "Numerals deserve mono — scores, RTPs, timestamps never set in body.",
+    "Drop caps open lead paragraphs — a department headline starts the read.",
+    "Italic is rare and earned — pull quotes, bylines, the occasional dedication.",
+    "Margins matter more than flourishes — white space is an editorial decision.",
+    "Trust is typographic — the system reads serious so the verdict can be trusted."
+  ]
+}

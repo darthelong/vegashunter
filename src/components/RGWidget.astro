@@ -1,0 +1,46 @@
+---
+/**
+ * Responsible Gambling widget — footer column.
+ *
+ * 18+ marker · short statement · helplines list · external links to support
+ * organisations. Helplines copy is per-locale via i18n strings.
+ */
+import { withLocale } from '@lib/i18n';
+import { type Locale } from '@lib/locales';
+
+export interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = withLocale(locale.code);
+
+// Static external links — these are the trusted helplines, kept here rather
+// than per-locale to ensure they always resolve. Per-locale links can be added
+// later when we have legal-reviewed data per market.
+const HELPLINE_LINKS = [
+  { name: 'BeGambleAware', href: 'https://www.begambleaware.org/' },
+  { name: 'GamCare',       href: 'https://www.gamcare.org.uk/' },
+  { name: 'GA',            href: 'https://www.gamblersanonymous.org/' },
+];
+---
+<section aria-labelledby="rg-heading" class="flex flex-col gap-3 text-sm">
+  <div class="flex items-center gap-3">
+    <span class="font-mono font-bold text-bone border border-bone px-2 py-1 text-xs">
+      18+
+    </span>
+    <span id="rg-heading" class="mono-caps text-xs text-silver">
+      {t('footer.responsible_gambling')}
+    </span>
+  </div>
+  <p class="text-silver leading-relaxed">{t('rg.statement')}</p>
+  <ul class="flex flex-wrap gap-x-4 gap-y-2 text-xs text-mute">
+    {HELPLINE_LINKS.map((link) => (
+      <li>
+        <a href={link.href}
+           target="_blank"
+           rel="noopener noreferrer external"
+           class="hover:text-bone underline-offset-2 hover:underline">
+          {link.name}
+        </a>
+      </li>
+    ))}
+  </ul>
+</section>

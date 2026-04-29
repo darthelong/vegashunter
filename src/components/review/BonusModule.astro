@@ -1,0 +1,61 @@
+---
+/** Module 3 — Bonus & Promotions. */
+import type { ReviewFrontmatter, Casino } from '@lib/schemas';
+import type { Locale } from '@lib/locales';
+import { withLocale } from '@lib/i18n';
+import { buildAffiliateUrl } from '@lib/casinos';
+
+export interface Props { locale: Locale; casino: Casino; fm: ReviewFrontmatter }
+const { locale, casino, fm } = Astro.props;
+const t = withLocale(locale.code);
+const cta = buildAffiliateUrl(fm.affiliate_link_id, { sub1: 'review-bonus', sub2: fm.slug });
+---
+<section id="bonus" class="mb-12 scroll-mt-24">
+  <header class="mb-6">
+    <h2 class="font-display text-3xl text-bone">{t('common.bonus')}</h2>
+    <div class="rule with-tick mt-3 max-w-md"></div>
+  </header>
+
+  <div class="card p-6 grid md:grid-cols-[1fr_auto] gap-6 items-center">
+    <dl class="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-4">
+      <div>
+        <dt class="font-mono uppercase tracking-mono-caps text-xs text-mute">Welcome</dt>
+        <dd class="font-display text-2xl text-bone">
+          {fm.bonus.currency} {fm.bonus.amount}
+          {fm.bonus.free_spins ? <span class="text-base text-silver"> + {fm.bonus.free_spins} FS</span> : null}
+        </dd>
+      </div>
+      <div>
+        <dt class="font-mono uppercase tracking-mono-caps text-xs text-mute">Wagering</dt>
+        <dd class="font-mono text-bone">{fm.bonus.wagering}×</dd>
+      </div>
+      {fm.bonus.max_bet != null && (
+        <div>
+          <dt class="font-mono uppercase tracking-mono-caps text-xs text-mute">Max bet</dt>
+          <dd class="font-mono text-bone">{fm.bonus.currency} {fm.bonus.max_bet}</dd>
+        </div>
+      )}
+      {fm.bonus.validity_days != null && (
+        <div>
+          <dt class="font-mono uppercase tracking-mono-caps text-xs text-mute">Validity</dt>
+          <dd class="font-mono text-bone">{fm.bonus.validity_days} d</dd>
+        </div>
+      )}
+      {fm.bonus.code && (
+        <div>
+          <dt class="font-mono uppercase tracking-mono-caps text-xs text-mute">Code</dt>
+          <dd class="font-mono text-ribbon font-bold tracking-wide">{fm.bonus.code}</dd>
+        </div>
+      )}
+    </dl>
+
+    <a href={cta} target="_blank" rel="nofollow sponsored noopener"
+       class="cta-pill"
+       data-aff-click data-link-id={fm.affiliate_link_id}
+       data-casino={casino.slug} data-page-type="review-bonus">
+      {t('common.visit_casino')} →
+    </a>
+  </div>
+
+  <slot />
+</section>

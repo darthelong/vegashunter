@@ -1,0 +1,13 @@
+# VegasHunter — robots.txt
+#
+# This file ships in production. Staging/preview deploys should override
+# with a robots.txt that disallows everything (Cloudflare Pages handles this
+# via per-environment _headers — see README).
+
+User-agent: *
+Allow: /
+
+# Don't index the geo-block redirect page.
+Disallow: /*/region-not-available/
+
+Sitemap: https://vegashunter.pro/sitemap-index.xml

@@ -1,0 +1,107 @@
+# VegasHunter — locale registry (single source of truth)
+#
+# When adding a locale here, you MUST also:
+#   1. Add it to LOCALES + HREFLANG_MAP in astro.config.mjs
+#   2. Create i18n/{code}.json with ALL UI string keys
+#   3. Add review path segment in `paths.reviews` below
+#   4. Translate footer disclosure in `disclosure` below
+#
+# Build will fail (Zod validation) if any of the above is missing.
+
+- code: en
+  name: English
+  hreflang: en
+  is_default: true
+  is_x_default: true
+  market_scope: global
+  currency_default: USD
+  status: active
+  paths:
+    reviews: reviews
+    blog: blog
+    providers: providers
+    slots: slots
+    payment_methods: payment-methods
+    bonuses: bonuses
+    authors: authors
+    methodology: methodology
+
+- code: en-ca
+  name: English (Canada)
+  hreflang: en-CA
+  market_scope: ca
+  currency_default: CAD
+  status: active
+  paths: { reviews: reviews, blog: blog, providers: providers, slots: slots, payment_methods: payment-methods, bonuses: bonuses, authors: authors, methodology: methodology }
+
+- code: en-gb
+  name: English (UK)
+  hreflang: en-GB
+  market_scope: gb
+  currency_default: GBP
+  status: active
+  paths: { reviews: reviews, blog: blog, providers: providers, slots: slots, payment_methods: payment-methods, bonuses: bonuses, authors: authors, methodology: methodology }
+
+- code: en-ie
+  name: English (Ireland)
+  hreflang: en-IE
+  market_scope: ie
+  currency_default: EUR
+  status: active
+  paths: { reviews: reviews, blog: blog, providers: providers, slots: slots, payment_methods: payment-methods, bonuses: bonuses, authors: authors, methodology: methodology }
+
+- code: de
+  name: Deutsch
+  hreflang: de
+  market_scope: dach
+  currency_default: EUR
+  status: active
+  paths: { reviews: bewertungen, blog: blog, providers: anbieter, slots: spielautomaten, payment_methods: zahlungsmethoden, bonuses: boni, authors: autoren, methodology: methodologie }
+
+- code: es
+  name: Español
+  hreflang: es
+  market_scope: es
+  currency_default: EUR
+  status: active
+  paths: { reviews: resenas, blog: blog, providers: proveedores, slots: tragamonedas, payment_methods: metodos-de-pago, bonuses: bonos, authors: autores, methodology: metodologia }
+
+- code: es-ar
+  name: Español (Argentina)
+  hreflang: es-AR
+  market_scope: ar
+  currency_default: ARS
+  status: active
+  paths: { reviews: resenas, blog: blog, providers: proveedores, slots: tragamonedas, payment_methods: metodos-de-pago, bonuses: bonos, authors: autores, methodology: metodologia }
+
+- code: es-mx
+  name: Español (México)
+  hreflang: es-MX
+  market_scope: mx
+  currency_default: MXN
+  status: active
+  paths: { reviews: resenas, blog: blog, providers: proveedores, slots: tragamonedas, payment_methods: metodos-de-pago, bonuses: bonos, authors: autores, methodology: metodologia }
+
+- code: pt
+  name: Português
+  hreflang: pt
+  market_scope: pt
+  currency_default: EUR
+  status: active
+  paths: { reviews: avaliacoes, blog: blog, providers: provedores, slots: caca-niqueis, payment_methods: metodos-de-pagamento, bonuses: bonus, authors: autores, methodology: metodologia }
+
+- code: pt-br
+  name: Português (Brasil)
+  hreflang: pt-BR
+  market_scope: br
+  currency_default: BRL
+  status: active
+  paths: { reviews: avaliacoes, blog: blog, providers: provedores, slots: caca-niqueis, payment_methods: metodos-de-pagamento, bonuses: bonus, authors: autores, methodology: metodologia }
+
+- code: ru
+  name: Русский
+  hreflang: ru
+  market_scope: ru-row
+  currency_default: USD
+  status: active
+  paths: { reviews: obzory, blog: blog, providers: provaydery, slots: igrovye-avtomaty, payment_methods: sposoby-oplaty, bonuses: bonusy, authors: avtory, methodology: metodologiya }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Temporary favicon — high-contrast V on the deepest ink, until the proper
+  graphic mark is designed and paired with the wordmark. The V is set in
+  Gloock-spirit: a single bold serif glyph with the magenta tick beneath.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" fill="#0B0A10"/>
+  <text x="32" y="46" text-anchor="middle"
+        font-family="Gloock, 'Times New Roman', serif"
+        font-size="52" fill="#F4EFE2">V</text>
+  <rect x="22" y="52" width="20" height="2" fill="#FF2D7A"/>
+</svg>

@@ -1,0 +1,44 @@
+---
+/**
+ * Shared shell for placeholder static pages (about, contact, privacy, ToS,
+ * methodology, RG). Single editorial column, masthead-style.
+ */
+export interface Props {
+  heading: string;
+  lead?: string;
+  bodySlot?: boolean; // unused; using <slot/> below
+}
+const { heading, lead } = Astro.props;
+---
+<article class="max-w-3xl mx-auto px-6 lg:px-10 py-20">
+  <div class="flex items-center gap-4 mb-12">
+    <hr class="flex-1" />
+    <span class="department">VEGASHUNTER · EDITORIAL</span>
+    <hr class="flex-1" />
+  </div>
+
+  <h1 class="font-display text-4xl md:text-5xl leading-tight text-bone">{heading}</h1>
+
+  <div class="rule with-tick max-w-md mt-8 mb-10"></div>
+
+  {lead && (
+    <p class="font-editorial italic text-xl text-silver leading-relaxed">{lead}</p>
+  )}
+
+  <div class="prose-vh mt-10 text-bone leading-relaxed text-lg">
+    <slot />
+  </div>
+</article>
+
+<style>
+  .prose-vh :global(p)         { margin-bottom: 1.25em; }
+  .prose-vh :global(h2)        { font-family: 'Gloock', Georgia, serif; font-size: 1.875rem; line-height: 1.2; margin-top: 2em; margin-bottom: 0.6em; }
+  .prose-vh :global(h3)        { font-family: 'Gloock', Georgia, serif; font-size: 1.375rem; line-height: 1.3; margin-top: 1.6em; margin-bottom: 0.4em; }
+  .prose-vh :global(a)         { color: #F4EFE2; text-decoration: underline; text-decoration-color: #FF2D7A; text-underline-offset: 4px; }
+  .prose-vh :global(a:hover)   { text-decoration-thickness: 2px; }
+  .prose-vh :global(ul)        { list-style: none; padding-left: 0; }
+  .prose-vh :global(ul li)     { padding-left: 1.5rem; position: relative; margin-bottom: 0.5em; }
+  .prose-vh :global(ul li::before) {
+    content: '·'; color: #FF2D7A; position: absolute; left: 0.4rem; font-weight: bold;
+  }
+</style>

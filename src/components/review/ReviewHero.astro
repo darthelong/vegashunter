@@ -1,0 +1,64 @@
+---
+/** Module 1 — Hero. Logo, name, score, info bar, primary CTA. */
+import type { Casino, ReviewFrontmatter } from '@lib/schemas';
+import type { Locale } from '@lib/locales';
+import { withLocale } from '@lib/i18n';
+import { buildAffiliateUrl } from '@lib/casinos';
+
+export interface Props { locale: Locale; casino: Casino; fm: ReviewFrontmatter }
+const { locale, casino, fm } = Astro.props;
+const t = withLocale(locale.code);
+const cta = buildAffiliateUrl(fm.affiliate_link_id, {
+  sub1: 'review', sub2: fm.slug,
+});
+---
+<section class="border-b border-hairline pb-10 mb-10">
+  <div class="grid md:grid-cols-[auto_1fr_auto] gap-8 items-start">
+
+    {/* Logo */}
+    <img src={casino.logo} alt={`${casino.brand_name} logo`}
+         class="w-24 h-24 md:w-32 md:h-32 object-contain bg-twilight border border-hairline rounded-sm" />
+
+    {/* Title + meta */}
+    <div>
+      <h1 class="font-display text-4xl md:text-5xl leading-tight text-bone">
+        {fm.title}
+      </h1>
+      <dl class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-3 text-sm">
+        <div>
+          <dt class="font-mono uppercase tracking-mono-caps text-xs text-mute">Est.</dt>
+          <dd class="text-bone">{casino.established}</dd>
+        </div>
+        <div>
+          <dt class="font-mono uppercase tracking-mono-caps text-xs text-mute">License</dt>
+          <dd class="text-bone">{casino.master_license}</dd>
+        </div>
+        <div>
+          <dt class="font-mono uppercase tracking-mono-caps text-xs text-mute">Min. dep.</dt>
+          <dd class="text-bone font-mono">{fm.bonus.currency} {casino.default_min_deposit}</dd>
+        </div>
+        <div>
+          <dt class="font-mono uppercase tracking-mono-caps text-xs text-mute">Score</dt>
+          <dd class="text-bone font-mono font-bold">{fm.score.toFixed(1)} / 10</dd>
+        </div>
+      </dl>
+    </div>
+
+    {/* CTA + bonus */}
+    <div class="flex flex-col gap-3 items-start md:items-end">
+      <p class="text-sm text-silver md:text-right">
+        <span class="font-mono uppercase tracking-mono-caps text-xs text-mute block">Welcome bonus</span>
+        <span class="font-display text-2xl text-bone block mt-1">
+          {fm.bonus.currency} {fm.bonus.amount}
+          {fm.bonus.free_spins ? ` + ${fm.bonus.free_spins} FS` : ''}
+        </span>
+      </p>
+      <a href={cta} target="_blank" rel="nofollow sponsored noopener"
+         class="cta-pill"
+         data-aff-click data-link-id={fm.affiliate_link_id}
+         data-casino={casino.slug} data-page-type="review">
+        {t('common.visit_casino')} →
+      </a>
+    </div>
+  </div>
+</section>

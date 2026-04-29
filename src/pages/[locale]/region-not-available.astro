@@ -1,0 +1,57 @@
+---
+/**
+ * Region not available — served at 451 by the CF Pages middleware when a
+ * request originates from a blocked country. Excluded from sitemap.
+ *
+ * The detected country is passed via ?cc=PL — purely informational, not a
+ * trust signal. Search engines should not index this page.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { allLocales, localeByCode, defaultLocale, SITE_URL } from '@lib/locales';
+import { withLocale } from '@lib/i18n';
+
+export async function getStaticPaths() {
+  return allLocales().map((l) => ({ params: { locale: l.code } }));
+}
+
+const { locale: localeCode } = Astro.params;
+const locale = localeByCode(localeCode!) ?? defaultLocale();
+const t = withLocale(locale.code);
+
+// Read ?cc= for display (server-side: Astro.url; the CF middleware adds it)
+const cc = Astro.url.searchParams.get('cc') ?? '';
+
+const title = `${t('region_blocked.heading')} — ${t('meta.site_name')}`;
+const description = t('region_blocked.body');
+---
+<BaseLayout
+  locale={locale.code}
+  title={title}
+  description={description}
+  canonical={`${SITE_URL}/${locale.code}/region-not-available/`}
+  robots="noindex,nofollow"
+>
+  <section class="max-w-2xl mx-auto px-6 py-24 text-center">
+    <p class="mono-caps text-xs text-mute mb-8">451 · UNAVAILABLE FOR LEGAL REASONS</p>
+
+    <h1 class="font-display text-4xl md:text-5xl leading-tight text-bone">
+      {t('region_blocked.heading')}
+    </h1>
+
+    <div class="rule with-tick max-w-md mx-auto mt-10 mb-10"></div>
+
+    <p class="text-silver leading-relaxed">{t('region_blocked.body')}</p>
+
+    {cc && (
+      <p class="mt-8 font-mono text-xs text-mute uppercase tracking-mono-caps">
+        {t('region_blocked.detected_country', { country: cc })}
+      </p>
+    )}
+
+    <div class="mt-12">
+      <a href={`/${locale.code}/contact/`} class="read-more">
+        {t('region_blocked.contact')} →
+      </a>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,115 @@
+---
+/**
+ * BaseLayout — global page shell.
+ *
+ * Responsibilities:
+ *   - <html lang="..."> + <head> with title, description, canonical, hreflang
+ *   - OpenGraph + Twitter cards
+ *   - Schema.org Organization JSON-LD (global)
+ *   - Self-hosted fonts via global.css
+ *   - Header + main + Footer + (optional) cookie consent
+ */
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import CookieConsent from '@components/CookieConsent.astro';
+import { localeByCode, defaultLocale, SITE_URL, type Locale } from '@lib/locales';
+import { withLocale } from '@lib/i18n';
+import { organizationJsonLd } from '@lib/seo';
+import { FLAGS } from '@lib/flags';
+import '../styles/global.css';
+
+export interface Props {
+  locale: string;
+  title: string;
+  description: string;
+  canonical?: string;
+  ogImage?: string;
+  robots?: string;
+  /** Hreflang alternates for this URL — emit one per locale that has the page. */
+  alternates?: Array<{ hreflang: string; href: string }>;
+  /** Extra JSON-LD blocks (Review, Article, ItemList, ...) */
+  jsonLd?: unknown[];
+}
+
+const {
+  locale: localeCode,
+  title,
+  description,
+  canonical,
+  ogImage = `${SITE_URL}/og-default.png`,
+  robots = 'index,follow',
+  alternates = [],
+  jsonLd = [],
+} = Astro.props;
+
+const locale = localeByCode(localeCode) ?? defaultLocale();
+const t = withLocale(locale.code);
+
+const url = canonical ?? new URL(Astro.url.pathname, SITE_URL).href;
+
+const allJsonLd = [organizationJsonLd(), ...jsonLd];
+---
+<!doctype html>
+<html lang={locale.hreflang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#0B0A10" />
+    <meta name="color-scheme" content="dark" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={robots} />
+    <link rel="canonical" href={url} />
+
+    {/* Hreflang — emitted once per locale where the page exists */}
+    {alternates.map((alt) => (
+      <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+    ))}
+
+    {/* OpenGraph */}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="VegasHunter" />
+    <meta property="og:url" content={url} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content={locale.hreflang.replace('-', '_')} />
+
+    {/* Twitter */}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    {/* Schema.org JSON-LD */}
+    {allJsonLd.map((data) => (
+      <script type="application/ld+json" set:html={JSON.stringify(data)} />
+    ))}
+
+    {/* Favicons — placeholder until proper logo mark is designed */}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    {/* Preload primary fonts (LCP-critical) — WOFF2 first */}
+    <link rel="preload" href="/fonts/Gloock-Regular.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/BricolageGrotesque-Regular.woff2" as="font" type="font/woff2" crossorigin />
+
+    {/* Press Ledger marker for view-source enthusiasts */}
+    <meta name="generator" content="VegasHunter · Press Ledger v0.2" />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <a href="#main" class="skip-link">{t('header.skip_to_content')}</a>
+
+    <Header locale={locale} />
+
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+
+    <Footer locale={locale} />
+
+    {FLAGS.COOKIE_CONSENT_ENABLED && <CookieConsent locale={locale} />}
+  </body>
+</html>

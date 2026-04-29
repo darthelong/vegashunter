@@ -1,0 +1,29 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import StaticPage from '@components/StaticPage.astro';
+import { allLocales, localeByCode, defaultLocale, SITE_URL } from '@lib/locales';
+import { withLocale } from '@lib/i18n';
+import { alternateHrefs } from '@lib/seo';
+
+export async function getStaticPaths() {
+  return allLocales().map((l) => ({ params: { locale: l.code } }));
+}
+
+const { locale: localeCode } = Astro.params;
+const locale = localeByCode(localeCode!) ?? defaultLocale();
+const t = withLocale(locale.code);
+const alternates = alternateHrefs((l) => `/${l.code}/contact/`);
+
+const email = 'hello@vegashunter.pro';
+---
+<BaseLayout
+  locale={locale.code}
+  title={`${t('page.contact.heading')} — ${t('meta.site_name')}`}
+  description={t('page.contact.body', { email })}
+  canonical={`${SITE_URL}/${locale.code}/contact/`}
+  alternates={alternates}
+>
+  <StaticPage heading={t('page.contact.heading')}>
+    <p set:html={t('page.contact.body', { email: `<a href="mailto:${email}">${email}</a>` })} />
+  </StaticPage>
+</BaseLayout>

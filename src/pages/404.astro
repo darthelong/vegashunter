@@ -1,0 +1,30 @@
+---
+/**
+ * Global 404 — handled per-locale via best-effort detection of the requested
+ * URL prefix. If we can't infer the locale, fall back to the default.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { localeFromPath, defaultLocale } from '@lib/locales';
+import { withLocale } from '@lib/i18n';
+
+const locale = localeFromPath(Astro.url.pathname) ?? defaultLocale();
+const t = withLocale(locale.code);
+---
+<BaseLayout
+  locale={locale.code}
+  title={`${t('error_404.heading')} — ${t('meta.site_name')}`}
+  description={t('error_404.body')}
+  robots="noindex,follow"
+>
+  <section class="max-w-2xl mx-auto px-6 py-24 text-center">
+    <p class="mono-caps text-xs text-mute mb-8">404</p>
+    <h1 class="font-display text-4xl md:text-5xl leading-tight text-bone">
+      {t('error_404.heading')}
+    </h1>
+    <div class="rule with-tick max-w-md mx-auto mt-10 mb-10"></div>
+    <p class="text-silver leading-relaxed">{t('error_404.body')}</p>
+    <div class="mt-12">
+      <a href={`/${locale.code}/`} class="cta-pill">{t('error_404.go_home')}</a>
+    </div>
+  </section>
+</BaseLayout>

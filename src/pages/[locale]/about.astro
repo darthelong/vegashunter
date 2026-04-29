@@ -1,0 +1,28 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import StaticPage from '@components/StaticPage.astro';
+import { allLocales, localeByCode, defaultLocale, SITE_URL } from '@lib/locales';
+import { withLocale } from '@lib/i18n';
+import { alternateHrefs } from '@lib/seo';
+
+export async function getStaticPaths() {
+  return allLocales().map((l) => ({ params: { locale: l.code } }));
+}
+
+const { locale: localeCode } = Astro.params;
+const locale = localeByCode(localeCode!) ?? defaultLocale();
+const t = withLocale(locale.code);
+
+const alternates = alternateHrefs((l) => `/${l.code}/about/`);
+---
+<BaseLayout
+  locale={locale.code}
+  title={`${t('page.about.heading')} — ${t('meta.site_name')}`}
+  description={t('page.about.lead')}
+  canonical={`${SITE_URL}/${locale.code}/about/`}
+  alternates={alternates}
+>
+  <StaticPage heading={t('page.about.heading')} lead={t('page.about.lead')}>
+    <p>{t('placeholder.under_construction')}</p>
+  </StaticPage>
+</BaseLayout>

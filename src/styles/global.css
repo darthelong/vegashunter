@@ -1,0 +1,195 @@
+/* ============================================================
+   VegasHunter — Press Ledger v0.2 · global stylesheet
+   Self-hosted fonts (no Google Fonts, no third-party CDN — keeps
+   the site cookie-clean until consent is enabled).
+   ============================================================ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---- self-hosted fonts ----
+ * Subsetted to Latin + Latin-Extended (mono adds Cyrillic for Russian).
+ * WOFF2 first (best compression) → WOFF (zlib) → TTF fallback. Build the
+ * WOFF2 set via `npm run build:fonts` on a machine with brotli installed.
+ */
+@font-face {
+  font-family: 'Gloock';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+0020-024F, U+1E00-1EFF, U+2010-205E, U+2070-209F, U+20A0-20BF, U+2122, U+2190-21FF;
+  src: url('/fonts/Gloock-Regular.woff2') format('woff2'),
+       url('/fonts/Gloock-Regular.woff')  format('woff'),
+       url('/fonts/Gloock-Regular.ttf')   format('truetype');
+}
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+0020-024F, U+1E00-1EFF, U+2010-205E, U+2070-209F, U+20A0-20BF, U+2122, U+2190-21FF;
+  src: url('/fonts/BricolageGrotesque-Regular.woff2') format('woff2'),
+       url('/fonts/BricolageGrotesque-Regular.woff')  format('woff'),
+       url('/fonts/BricolageGrotesque-Regular.ttf')   format('truetype');
+}
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  unicode-range: U+0020-024F, U+1E00-1EFF, U+2010-205E, U+2070-209F, U+20A0-20BF, U+2122, U+2190-21FF;
+  src: url('/fonts/BricolageGrotesque-Bold.woff2') format('woff2'),
+       url('/fonts/BricolageGrotesque-Bold.woff')  format('woff'),
+       url('/fonts/BricolageGrotesque-Bold.ttf')   format('truetype');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+0020-024F, U+0400-052F, U+1E00-1EFF, U+2010-205E, U+2070-209F, U+20A0-20BF, U+2122, U+2190-21FF;
+  src: url('/fonts/JetBrainsMono-Regular.woff2') format('woff2'),
+       url('/fonts/JetBrainsMono-Regular.woff')  format('woff'),
+       url('/fonts/JetBrainsMono-Regular.ttf')   format('truetype');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  unicode-range: U+0020-024F, U+0400-052F, U+1E00-1EFF, U+2010-205E, U+2070-209F, U+20A0-20BF, U+2122, U+2190-21FF;
+  src: url('/fonts/JetBrainsMono-Bold.woff2') format('woff2'),
+       url('/fonts/JetBrainsMono-Bold.woff')  format('woff'),
+       url('/fonts/JetBrainsMono-Bold.ttf')   format('truetype');
+}
+@font-face {
+  font-family: 'Crimson Pro';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+0020-024F, U+1E00-1EFF, U+2010-205E, U+2070-209F, U+20A0-20BF, U+2122, U+2190-21FF;
+  src: url('/fonts/CrimsonPro-Regular.woff2') format('woff2'),
+       url('/fonts/CrimsonPro-Regular.woff')  format('woff'),
+       url('/fonts/CrimsonPro-Regular.ttf')   format('truetype');
+}
+@font-face {
+  font-family: 'Crimson Pro';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+0020-024F, U+1E00-1EFF, U+2010-205E, U+2070-209F, U+20A0-20BF, U+2122, U+2190-21FF;
+  src: url('/fonts/CrimsonPro-Italic.woff2') format('woff2'),
+       url('/fonts/CrimsonPro-Italic.woff')  format('woff'),
+       url('/fonts/CrimsonPro-Italic.ttf')   format('truetype');
+}
+
+/* ---- base ---- */
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+  html {
+    /* Editorial body sans, dark by default. */
+    @apply bg-ink text-bone font-body antialiased;
+    /* Smooth scroll for anchor links (respects prefers-reduced-motion). */
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+  body {
+    /* Lock to a single visible scrollbar gutter. */
+    @apply min-h-screen;
+  }
+  ::selection {
+    @apply bg-ribbon text-ink;
+  }
+  /* Press Ledger: hairlines mean section, department, division. */
+  hr {
+    @apply border-t border-hairline;
+  }
+
+  /* Wordmark + headlines */
+  .display, h1, h2, .h1, .h2 {
+    @apply font-display tracking-tight;
+  }
+  .editorial-italic {
+    @apply font-editorial italic;
+  }
+  .mono-caps {
+    @apply font-mono uppercase tracking-mono-caps;
+  }
+
+  /* Focus — visible, accessible, ribbon-tinted. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ribbon ring-offset-2 ring-offset-ink;
+  }
+
+  /* Keyboard skip-link reveal */
+  .skip-link {
+    @apply absolute left-3 top-3 -translate-y-32 focus:translate-y-0
+           bg-bone text-ink px-3 py-2 rounded-md text-sm font-bold z-50
+           transition-transform duration-200;
+  }
+}
+
+/* ---- components ---- */
+@layer components {
+  /* Editor's tick — the single chromatic gesture allowed on most pages. */
+  .ribbon-tick {
+    position: relative;
+  }
+  .ribbon-tick::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -8px;
+    width: 48px;
+    height: 2px;
+    background-color: theme('colors.ribbon');
+  }
+
+  /* Department label — small caps mono between two thin rules */
+  .department {
+    @apply font-mono uppercase tracking-mono-caps text-xs text-silver
+           inline-block px-3 bg-ink relative;
+  }
+
+  /* Hairline rule with optional center ribbon-tick */
+  .rule {
+    @apply h-px bg-hairline w-full relative;
+  }
+  .rule.with-tick::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: -1px;
+    transform: translateX(-50%);
+    width: 48px;
+    height: 3px;
+    background-color: theme('colors.ribbon');
+  }
+
+  /* CTA pill — magenta, used sparingly */
+  .cta-pill {
+    @apply inline-flex items-center gap-2 px-6 py-3 rounded-full
+           bg-ribbon text-ink font-body font-bold text-sm
+           uppercase tracking-mono-caps
+           transition-shadow duration-200 ease-press
+           hover:shadow-cta-hover focus-visible:shadow-cta-hover;
+  }
+
+  /* Read-more inline link with ribbon underline */
+  .read-more {
+    @apply inline-flex items-center gap-1 font-body font-bold text-bone
+           border-b-2 border-ribbon pb-0.5
+           transition-colors duration-200;
+  }
+
+  /* Card panel — clipping look */
+  .card {
+    @apply bg-dusk border border-hairline;
+  }
+}

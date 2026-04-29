@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Placeholder Slotoro logo. Replace with the operator's official logo when
+  the partnership is active.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="Slotoro logo placeholder">
+  <rect width="200" height="200" fill="#14111C"/>
+  <rect x="1" y="1" width="198" height="198" fill="none" stroke="#2D2640" stroke-width="1"/>
+  <text x="100" y="118" text-anchor="middle"
+        font-family="Gloock, Georgia, serif"
+        font-size="64" fill="#F4EFE2">S</text>
+  <rect x="84" y="142" width="32" height="3" fill="#FF2D7A"/>
+  <text x="100" y="168" text-anchor="middle"
+        font-family="JetBrains Mono, monospace"
+        font-size="9" letter-spacing="2" fill="#B3AAC3">SLOTORO</text>
+</svg>

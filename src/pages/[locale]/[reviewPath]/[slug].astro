@@ -1,0 +1,110 @@
+---
+/**
+ * Review route — /{locale}/{review_segment}/{slug}/
+ *
+ * For each locale, iterates the locale's review collection entries and emits
+ * a static page at the locale's translated review path. So:
+ *   /en/reviews/slotoro/
+ *   /de/bewertungen/slotoro-bewertung/
+ *   /es/resenas/slotoro-resena/
+ *   ...
+ *
+ * Cross-locale alternates are computed from the casino slug + each locale's
+ * review with that casino — a review only contributes to alternates if the
+ * locale has it.
+ */
+import type { GetStaticPaths } from 'astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+import ReviewLayout from '@layouts/ReviewLayout.astro';
+import { allLocales, localeByCode, defaultLocale, SITE_URL, type Locale } from '@lib/locales';
+import { withLocale } from '@lib/i18n';
+import { alternateHrefs, breadcrumbJsonLd } from '@lib/seo';
+import { requireCasino } from '@lib/casinos';
+import { reviewJsonLd, faqJsonLd } from '@lib/review-seo';
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const allReviews = await getCollection('reviews');
+  const out: Array<{
+    params: { locale: string; reviewPath: string; slug: string };
+    props:  { review: CollectionEntry<'reviews'> };
+  }> = [];
+
+  for (const locale of allLocales()) {
+    const inLocale = allReviews.filter((r) => r.data.locale === locale.code);
+    for (const review of inLocale) {
+      out.push({
+        params: {
+          locale: locale.code,
+          reviewPath: locale.paths.reviews,
+          slug: review.data.slug,
+        },
+        props: { review },
+      });
+    }
+  }
+  return out;
+};
+
+const { locale: localeCode } = Astro.params;
+const { review } = Astro.props;
+const locale = localeByCode(localeCode!) ?? defaultLocale();
+const t = withLocale(locale.code);
+
+const fm = review.data;
+const casino = requireCasino(fm.casino);
+
+// Cross-locale alternates: every locale that has a review for this casino.
+const allReviews = await getCollection('reviews');
+const reviewsByLocale = new Map<string, CollectionEntry<'reviews'>>();
+for (const r of allReviews) {
+  if (r.data.casino === fm.casino) reviewsByLocale.set(r.data.locale, r);
+}
+const alternates = alternateHrefs((l: Locale) => {
+  const r = reviewsByLocale.get(l.code);
+  return r ? `/${l.code}/${l.paths.reviews}/${r.data.slug}/` : undefined;
+});
+
+const path = `/${locale.code}/${locale.paths.reviews}/${fm.slug}/`;
+const url = `${SITE_URL}${path}`;
+
+// Render the MDX body via Content collection
+const { Content, headings } = await review.render();
+
+const breadcrumbs = breadcrumbJsonLd([
+  { name: t('meta.site_name'), url: `${SITE_URL}/${locale.code}/` },
+  { name: t('nav.reviews'),    url: `${SITE_URL}/${locale.code}/${locale.paths.reviews}/` },
+  { name: casino.brand_name,   url },
+]);
+
+const reviewLd = reviewJsonLd({
+  url,
+  casino,
+  fm,
+  authorName: fm.author, // resolved to full Person record on author page
+  siteUrl: SITE_URL,
+});
+
+const faqLd = fm.modules_enabled.includes('faq') && fm.faq.length > 0
+  ? faqJsonLd(fm.faq) : null;
+
+const jsonLd = [breadcrumbs, reviewLd, ...(faqLd ? [faqLd] : [])];
+---
+<BaseLayout
+  locale={locale.code}
+  title={fm.meta_title}
+  description={fm.meta_description}
+  canonical={url}
+  alternates={alternates}
+  jsonLd={jsonLd}
+>
+  <ReviewLayout
+    locale={locale}
+    casino={casino}
+    fm={fm}
+    headings={headings}
+  >
+    <Content />
+  </ReviewLayout>
+</BaseLayout>

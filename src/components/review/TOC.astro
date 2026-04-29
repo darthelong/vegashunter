@@ -1,0 +1,48 @@
+---
+/** Sticky-on-desktop table of contents — modules + h2 anchors from MDX body. */
+import type { MarkdownHeading } from 'astro';
+import type { ReviewFrontmatter } from '@lib/schemas';
+
+export interface Props {
+  fm: ReviewFrontmatter;
+  /** Headings from review.render() — used to surface MDX-supplied subsections. */
+  headings: MarkdownHeading[];
+}
+const { fm, headings } = Astro.props;
+
+const MODULE_LABELS: Record<string, string> = {
+  hero:      'Overview',
+  verdict:   'Quick verdict',
+  bonus:     'Bonus',
+  games:     'Games',
+  payments:  'Payments',
+  mobile:    'Mobile',
+  support:   'Support',
+  license:   'Licensing',
+  scoring:   'Scoring',
+  faq:       'FAQ',
+  final_cta: 'Verdict',
+  ugc:       'User reviews',
+};
+
+const items = fm.modules_enabled
+  .filter((m) => m !== 'hero')
+  .map((m) => ({ href: `#${m === 'final_cta' ? 'final' : m}`, label: MODULE_LABELS[m] ?? m }));
+---
+<aside class="hidden lg:block sticky top-6 self-start" aria-labelledby="toc-heading">
+  <h2 id="toc-heading"
+      class="font-mono uppercase tracking-mono-caps text-xs text-silver mb-4">
+    On this page
+  </h2>
+  <nav class="border-l border-hairline">
+    <ol class="space-y-2 pl-4">
+      {items.map((it) => (
+        <li>
+          <a href={it.href} class="text-silver hover:text-bone hover:border-l-2 hover:border-ribbon hover:-ml-[2px] hover:pl-[6px] block py-1 text-sm transition-colors">
+            {it.label}
+          </a>
+        </li>
+      ))}
+    </ol>
+  </nav>
+</aside>

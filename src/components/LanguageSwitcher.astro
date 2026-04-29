@@ -1,0 +1,67 @@
+---
+/**
+ * LanguageSwitcher — switches the user between locales.
+ *
+ * Sprint 0 behavior: every locale link points at that locale's homepage. In
+ * Sprint 1+ we'll thread `alternates` through pages so the switcher offers
+ * the equivalent URL when one exists, and a fallback to the locale homepage
+ * when it doesn't (per docs §3.5).
+ */
+import { allLocales, type Locale } from '@lib/locales';
+import { withLocale } from '@lib/i18n';
+
+export interface Props {
+  locale: Locale;
+  variant?: 'desktop' | 'mobile';
+  /** Optional map of localeCode -> path (preferred over fallback to home) */
+  alternates?: Record<string, string>;
+}
+const { locale, variant = 'desktop', alternates = {} } = Astro.props;
+const t = withLocale(locale.code);
+const locales = allLocales();
+---
+<div class:list={[
+  'language-switcher',
+  variant === 'mobile' ? 'block' : 'relative inline-block',
+]}>
+  <details class={variant === 'mobile' ? '' : 'group'}>
+    <summary class:list={[
+      'list-none cursor-pointer flex items-center gap-2',
+      'font-mono uppercase tracking-mono-caps text-xs text-silver',
+      'hover:text-bone transition-colors',
+      variant === 'mobile' ? 'py-2' : '',
+    ]}
+      aria-label={t('a11y.language_switcher')}>
+      <span aria-hidden="true">⌘</span>
+      <span>{locale.hreflang.toUpperCase()}</span>
+      <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+        <path d="M2 4l3 3 3-3" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </summary>
+    <ul class:list={[
+      'mt-2 grid grid-cols-1',
+      variant === 'mobile' ? 'gap-1 pt-2' : 'absolute right-0 z-30 min-w-[220px] bg-dusk border border-hairline shadow-lg p-2 gap-0.5',
+    ]}>
+      {locales.map((l) => {
+        const href = alternates[l.code] ?? `/${l.code}/`;
+        const active = l.code === locale.code;
+        return (
+          <li>
+            <a href={href} hreflang={l.hreflang}
+               class:list={[
+                 'flex items-center justify-between px-3 py-2',
+                 'font-body text-sm rounded-sm',
+                 'text-silver hover:text-bone hover:bg-twilight',
+                 active && 'text-bone bg-twilight',
+               ]}>
+              <span>{l.name}</span>
+              <span class="font-mono uppercase tracking-mono-caps text-xs text-mute ml-3">
+                {l.hreflang}
+              </span>
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  </details>
+</div>

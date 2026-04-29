@@ -1,0 +1,27 @@
+---
+/**
+ * Root redirect — / → /en/
+ *
+ * Astro's i18n config (prefixDefaultLocale: true, redirectToDefaultLocale: true)
+ * should generate this automatically, but we ship an explicit fallback so a
+ * direct hit on the root never 404s on any host. Uses meta refresh so it
+ * works even with JS disabled.
+ */
+import { defaultLocale, SITE_URL } from '@lib/locales';
+const target = `/${defaultLocale().code}/`;
+const url = new URL(target, SITE_URL).href;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>VegasHunter</title>
+    <meta http-equiv="refresh" content={`0;url=${target}`} />
+    <link rel="canonical" href={url} />
+    <meta name="robots" content="noindex" />
+  </head>
+  <body>
+    <p>Redirecting to <a href={target}>{target}</a>…</p>
+    <script set:html={`window.location.replace(${JSON.stringify(target)});`} />
+  </body>
+</html>

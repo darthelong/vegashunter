@@ -1,0 +1,26 @@
+---
+/** Module 10 — FAQ. Pulls items from frontmatter. JSON-LD emitted by route. */
+import type { ReviewFrontmatter } from '@lib/schemas';
+export interface Props { fm: ReviewFrontmatter }
+const { fm } = Astro.props;
+---
+{fm.faq.length > 0 && (
+  <section id="faq" class="mb-12 scroll-mt-24">
+    <header class="mb-6">
+      <h2 class="font-display text-3xl text-bone">Frequently asked questions</h2>
+      <div class="rule with-tick mt-3 max-w-md"></div>
+    </header>
+    <div class="card divide-y divide-hairline">
+      {fm.faq.map((item) => (
+        <details class="group p-5">
+          <summary class="cursor-pointer flex items-start justify-between gap-4 list-none">
+            <span class="font-display text-xl text-bone leading-snug">{item.q}</span>
+            <span aria-hidden="true"
+                  class="text-ribbon text-2xl leading-none transition-transform group-open:rotate-45">+</span>
+          </summary>
+          <div class="mt-3 text-silver leading-relaxed">{item.a}</div>
+        </details>
+      ))}
+    </div>
+  </section>
+)}

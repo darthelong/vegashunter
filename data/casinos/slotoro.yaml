@@ -1,0 +1,27 @@
+# Sample casino entity. The slug is the global ID — never rename.
+# All locale-specific fields (title, score, bonus details) live in the
+# review's MDX frontmatter, not here.
+
+slug: slotoro
+brand_name: Slotoro
+logo: /casinos/slotoro.svg
+established: 2022
+owner: Hollycorn N.V.
+master_license: Curacao eGaming
+website: https://slotoro.com
+providers:
+  - pragmatic
+  - netent
+  - evolution
+  - playngo
+  - hacksaw
+tags:
+  - mobile_friendly
+  - live_casino
+  - crypto_friendly
+  - fast_payout
+  - new_casino
+default_min_deposit: 10
+default_currency: EUR
+status: active
+created_at: 2026-04-01

@@ -1,0 +1,23 @@
+# Geo-block list — countries that are denied access to the site.
+#
+# Codes are ISO 3166-1 alpha-2. Reads against the `CF-IPCountry` request header
+# on Cloudflare Pages (functions/_middleware.ts).
+#
+# Starting list per Sprint 0 decision (2026-04-27):
+#   - PL (no PL gambling promotion without local license — out of scope)
+#   - US (federal restrictions; per-state nuance not handled in MVP)
+#   - AU (interactive gambling restrictions)
+#   - FR (would require ARJEL — out of scope)
+#
+# Add countries by appending; never inline-comment a code (parser is strict).
+# Reason field is documentation only — not enforced.
+
+blocked:
+  - code: PL
+    reason: "no PL gambling advertising without local license"
+  - code: US
+    reason: "US federal + per-state — out of scope for MVP"
+  - code: AU
+    reason: "Interactive Gambling Act 2001 restrictions"
+  - code: FR
+    reason: "would require ARJEL license — out of scope"

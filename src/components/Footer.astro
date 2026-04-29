@@ -1,0 +1,75 @@
+---
+/**
+ * Footer — Press Ledger v0.2
+ *
+ * Carries:
+ *   - Affiliate disclosure (long-form, always visible)
+ *   - 18+ age warning
+ *   - RG widget (helplines)
+ *   - Footer nav (privacy, terms, RG, methodology, about, contact)
+ *   - Copyright + Press Ledger marker
+ */
+import RGWidget from './RGWidget.astro';
+import { withLocale } from '@lib/i18n';
+import { type Locale } from '@lib/locales';
+
+export interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = withLocale(locale.code);
+const year = new Date().getUTCFullYear();
+---
+<footer class="border-t border-hairline mt-24 bg-dusk">
+  <div class="max-w-screen-2xl mx-auto px-6 lg:px-10 py-12">
+    {/* Affiliate disclosure — always visible, never collapsed */}
+    <p class="font-editorial italic text-sm text-silver max-w-3xl leading-relaxed">
+      {t('footer.disclosure')}
+    </p>
+
+    <hr class="my-8" />
+
+    <div class="grid gap-10 md:grid-cols-3">
+      {/* Column 1 — site links */}
+      <nav aria-label="Footer site" class="flex flex-col gap-2 text-sm">
+        <a href={`/${locale.code}/about/`} class="text-silver hover:text-bone">
+          {t('footer.about')}
+        </a>
+        <a href={`/${locale.code}/contact/`} class="text-silver hover:text-bone">
+          {t('footer.contact')}
+        </a>
+        <a href={`/${locale.code}/methodology/`} class="text-silver hover:text-bone">
+          {t('footer.methodology')}
+        </a>
+      </nav>
+
+      {/* Column 2 — legal */}
+      <nav aria-label="Footer legal" class="flex flex-col gap-2 text-sm">
+        <a href={`/${locale.code}/privacy-policy/`} class="text-silver hover:text-bone">
+          {t('footer.privacy_policy')}
+        </a>
+        <a href={`/${locale.code}/terms-of-service/`} class="text-silver hover:text-bone">
+          {t('footer.terms')}
+        </a>
+        <a href={`/${locale.code}/responsible-gambling/`} class="text-silver hover:text-bone">
+          {t('footer.responsible_gambling')}
+        </a>
+      </nav>
+
+      {/* Column 3 — RG widget */}
+      <RGWidget locale={locale} />
+    </div>
+
+    <hr class="my-8" />
+
+    {/* Age warning band — restrained */}
+    <p class="text-xs text-mute mono-caps">
+      {t('footer.age_warning')}
+    </p>
+
+    <hr class="my-8" />
+
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-xs text-mute">
+      <span class="mono-caps">{t('footer.copyright', { year: String(year) })}</span>
+      <span class="mono-caps">VegasHunter · Press Ledger v0.2</span>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,69 @@
+---
+/**
+ * Locale homepage — Sprint 0 placeholder.
+ *
+ * In Sprint 2 this becomes the main ranking page (home = ranking główny per
+ * the architectural decision in docs §13.2). For now it's a typographic
+ * placeholder establishing the masthead, the system, and the disclosure.
+ */
+import BaseLayout from '@layouts/BaseLayout.astro';
+import InlineDisclosure from '@components/InlineDisclosure.astro';
+import { allLocales, localeByCode, defaultLocale, buildPath, SITE_URL } from '@lib/locales';
+import { withLocale } from '@lib/i18n';
+import { alternateHrefs } from '@lib/seo';
+
+export async function getStaticPaths() {
+  return allLocales().map((l) => ({ params: { locale: l.code } }));
+}
+
+const { locale: localeCode } = Astro.params;
+const locale = localeByCode(localeCode!) ?? defaultLocale();
+const t = withLocale(locale.code);
+
+const alternates = alternateHrefs((l) => `/${l.code}/`);
+
+const title = `${t('meta.site_name')} — ${t('meta.tagline')}`;
+const description = t('meta.tagline');
+---
+<BaseLayout
+  locale={locale.code}
+  title={title}
+  description={description}
+  canonical={`${SITE_URL}/${locale.code}/`}
+  alternates={alternates}
+>
+  <section class="max-w-screen-2xl mx-auto px-6 lg:px-10 py-20 md:py-28">
+    {/* Department label between rules */}
+    <div class="flex items-center gap-4 mb-10">
+      <hr class="flex-1" />
+      <span class="department">
+        ESTABLISHED 2026 · ISSUE NO. 01
+      </span>
+      <hr class="flex-1" />
+    </div>
+
+    {/* Wordmark */}
+    <h1 class="font-display text-[88px] md:text-[160px] leading-none text-center text-bone tracking-tight">
+      VegasHunter
+    </h1>
+
+    {/* Rule with magenta tick */}
+    <div class="rule with-tick mx-auto mt-6 max-w-2xl"></div>
+
+    {/* Italic tagline */}
+    <p class="font-editorial italic text-center text-silver text-xl md:text-2xl mt-8">
+      {t('meta.tagline')}
+    </p>
+
+    {/* Inline disclosure */}
+    <div class="max-w-3xl mx-auto mt-16">
+      <InlineDisclosure locale={locale} />
+    </div>
+
+    {/* Sprint 0 placeholder note */}
+    <div class="max-w-2xl mx-auto mt-16 text-center text-mute text-sm font-mono uppercase tracking-mono-caps">
+      <p>· {t('placeholder.under_construction')} ·</p>
+      <p class="mt-2">RANKING · COMING IN SPRINT 2</p>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,85 @@
+---
+/**
+ * Header — masthead with wordmark, primary nav, language switcher.
+ * Mobile: hamburger reveals nav + language switcher in a sheet.
+ */
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import { withLocale } from '@lib/i18n';
+import { buildPath, type Locale } from '@lib/locales';
+
+export interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = withLocale(locale.code);
+
+const homeHref = buildPath(locale.code, 'home');
+const navItems: Array<{ key: string; href: string }> = [
+  // For Sprint 0 most of these point at home or an upcoming page.
+  // They will resolve correctly once the relevant routes ship in Sprint 1+.
+  { key: 'nav.reviews',  href: `/${locale.code}/${locale.paths.reviews}/` },
+  { key: 'nav.rankings', href: `/${locale.code}/` },
+  { key: 'nav.blog',     href: `/${locale.code}/${locale.paths.blog}/` },
+  { key: 'nav.about',    href: `/${locale.code}/about/` },
+];
+---
+<header class="border-b border-hairline">
+  <div class="max-w-screen-2xl mx-auto px-6 lg:px-10 flex items-center justify-between h-20">
+    {/* Wordmark */}
+    <a href={homeHref} class="font-display text-2xl text-bone leading-none tracking-tight"
+       aria-label={t('meta.site_name')}>
+      VegasHunter
+    </a>
+
+    {/* Desktop nav */}
+    <nav class="hidden md:flex items-center gap-8" aria-label="Primary">
+      {navItems.map((item) => (
+        <a href={item.href}
+           class="font-body text-sm text-silver hover:text-bone transition-colors">
+          {t(item.key)}
+        </a>
+      ))}
+    </nav>
+
+    {/* Language switcher — desktop */}
+    <div class="hidden md:flex items-center gap-4">
+      <LanguageSwitcher locale={locale} />
+    </div>
+
+    {/* Mobile hamburger */}
+    <button
+      type="button"
+      class="md:hidden p-2 text-bone"
+      aria-label={t('nav.toggle_menu')}
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      data-toggle-menu>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+      </svg>
+    </button>
+  </div>
+
+  {/* Mobile sheet */}
+  <div id="mobile-menu" class="md:hidden hidden border-t border-hairline">
+    <nav class="px-6 py-4 flex flex-col gap-3" aria-label="Mobile primary">
+      {navItems.map((item) => (
+        <a href={item.href} class="font-body text-base text-bone py-2">
+          {t(item.key)}
+        </a>
+      ))}
+      <div class="pt-3 border-t border-hairline">
+        <LanguageSwitcher locale={locale} variant="mobile" />
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('[data-toggle-menu]');
+  const menu = document.getElementById('mobile-menu');
+  if (btn && menu) {
+    btn.addEventListener('click', () => {
+      const open = menu.classList.toggle('hidden') === false;
+      btn.setAttribute('aria-expanded', String(open));
+    });
+  }
+</script>

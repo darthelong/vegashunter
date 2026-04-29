@@ -1,0 +1,96 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+# Cancel in-progress runs for the same ref to save CI minutes.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Type-check + build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Pre-build (blocked countries JSON from YAML)
+        run: npm run build:blocked
+
+      - name: Type-check
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Upload build artifact (PR previews)
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist
+          retention-days: 7
+
+  lint-data:
+    name: Validate data files
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python (for YAML/JSON checks)
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install pyyaml
+        run: pip install pyyaml
+
+      - name: Validate YAML
+        run: |
+          for f in data/*.yaml; do
+            python -c "import yaml; yaml.safe_load(open('$f'))" && echo "OK: $f" || (echo "FAIL: $f" && exit 1)
+          done
+
+      - name: Validate JSON (i18n bundles + tokens)
+        run: |
+          for f in i18n/*.json brand/design-tokens.json; do
+            python -c "import json; json.load(open('$f'))" && echo "OK: $f" || (echo "FAIL: $f" && exit 1)
+          done
+
+      - name: Locale completeness check
+        run: |
+          python << 'PY'
+          import json, os, sys
+          ref = json.load(open('i18n/en.json'))
+          ref_keys = set(ref.keys())
+          fail = False
+          for f in sorted(os.listdir('i18n')):
+              if not f.endswith('.json') or f == 'en.json': continue
+              missing = ref_keys - set(json.load(open(f'i18n/{f}')).keys())
+              if missing:
+                  print(f"FAIL: {f} missing {sorted(missing)}")
+                  fail = True
+              else:
+                  print(f"OK: {f}")
+          sys.exit(1 if fail else 0)
+          PY

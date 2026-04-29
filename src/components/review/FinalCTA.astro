@@ -1,0 +1,39 @@
+---
+/** Module 11 — Final verdict + CTA. */
+import type { ReviewFrontmatter, Casino } from '@lib/schemas';
+import type { Locale } from '@lib/locales';
+import { withLocale } from '@lib/i18n';
+import { buildAffiliateUrl } from '@lib/casinos';
+
+export interface Props { locale: Locale; casino: Casino; fm: ReviewFrontmatter }
+const { locale, casino, fm } = Astro.props;
+const t = withLocale(locale.code);
+const cta = buildAffiliateUrl(fm.affiliate_link_id, { sub1: 'review-final', sub2: fm.slug });
+---
+<section id="final" class="mb-12 scroll-mt-24">
+  <header class="mb-6">
+    <h2 class="font-display text-3xl text-bone">Final verdict</h2>
+    <div class="rule with-tick mt-3 max-w-md"></div>
+  </header>
+
+  <div class="card p-8 grid md:grid-cols-[1fr_auto] gap-8 items-center">
+    <div>
+      <p class="font-display text-3xl text-bone leading-tight">
+        {fm.score >= 8.5 ? 'Recommended.'
+         : fm.score >= 7   ? 'Worth a look.'
+         : 'With reservations.'}
+      </p>
+      <p class="font-mono font-bold text-4xl text-bone mt-3 tabular-nums">
+        {fm.score.toFixed(1)} <span class="text-silver text-2xl">/ 10</span>
+      </p>
+    </div>
+    <a href={cta} target="_blank" rel="nofollow sponsored noopener"
+       class="cta-pill text-base px-8 py-4"
+       data-aff-click data-link-id={fm.affiliate_link_id}
+       data-casino={casino.slug} data-page-type="review-final">
+      {t('common.visit_casino')} →
+    </a>
+  </div>
+
+  <slot />
+</section>

@@ -1,0 +1,17 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["src/components/*"],
+      "@layouts/*":    ["src/layouts/*"],
+      "@lib/*":        ["src/lib/*"],
+      "@i18n/*":       ["i18n/*"],
+      "@data/*":       ["data/*"]
+    },
+    "verbatimModuleSyntax": true,
+    "allowJs": true
+  },
+  "include": ["src", "data", ".astro/types.d.ts", "astro.config.mjs", "tailwind.config.mjs"],
+  "exclude": ["dist", "node_modules"]
+}

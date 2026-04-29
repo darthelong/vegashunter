@@ -1,0 +1,138 @@
+---
+/**
+ * ReviewLayout — orchestrates the 12 modules conditionally.
+ *
+ * The MDX body is rendered as the "between modules" prose; module placement
+ * is fixed (Hero → Verdict → Bonus → Games → Payments → Mobile → Support →
+ * License → Scoring → FAQ → Final CTA → UGC). Editors place copy via named
+ * slots: `<Fragment slot="games">…</Fragment>` etc. Whatever lands outside
+ * a named slot falls into the default slot at the bottom.
+ */
+import type { MarkdownHeading } from 'astro';
+import type { Casino, ReviewFrontmatter } from '@lib/schemas';
+import type { Locale } from '@lib/locales';
+import { withLocale } from '@lib/i18n';
+import InlineDisclosure from '@components/InlineDisclosure.astro';
+import Breadcrumbs from '@components/review/Breadcrumbs.astro';
+import TOC from '@components/review/TOC.astro';
+import ReviewHero from '@components/review/ReviewHero.astro';
+import QuickVerdict from '@components/review/QuickVerdict.astro';
+import BonusModule from '@components/review/BonusModule.astro';
+import ReviewSection from '@components/review/ReviewSection.astro';
+import ScoreBreakdown from '@components/review/ScoreBreakdown.astro';
+import FAQModule from '@components/review/FAQModule.astro';
+import FinalCTA from '@components/review/FinalCTA.astro';
+import UGCPlaceholder from '@components/review/UGCPlaceholder.astro';
+
+export interface Props {
+  locale: Locale;
+  casino: Casino;
+  fm: ReviewFrontmatter;
+  headings: MarkdownHeading[];
+}
+const { locale, casino, fm, headings } = Astro.props;
+const t = withLocale(locale.code);
+
+const has = (m: string) => fm.modules_enabled.includes(m as any);
+
+const dateFmt = new Intl.DateTimeFormat(locale.hreflang, {
+  year: 'numeric', month: 'long', day: 'numeric',
+});
+
+const prettyAuthor = (slug: string) =>
+  slug.split('-').map((s) => s[0]!.toUpperCase() + s.slice(1)).join(' ');
+---
+<article class="max-w-screen-2xl mx-auto px-6 lg:px-10 py-10 lg:py-16">
+
+  {/* Breadcrumbs + byline */}
+  <header class="mb-10">
+    <Breadcrumbs crumbs={[
+      { name: t('meta.site_name'), href: `/${locale.code}/` },
+      { name: t('nav.reviews'),    href: `/${locale.code}/${locale.paths.reviews}/` },
+      { name: casino.brand_name,   href: `/${locale.code}/${locale.paths.reviews}/${fm.slug}/` },
+    ]} />
+
+    <div class="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-mono uppercase tracking-mono-caps text-mute">
+      <span>
+        <strong class="text-silver">By</strong>
+        <a href={`/${locale.code}/authors/${fm.author}/`}
+           class="text-bone hover:underline decoration-ribbon underline-offset-2">
+          {prettyAuthor(fm.author)}
+        </a>
+      </span>
+      <span>{t('common.published')}: {dateFmt.format(fm.published_at)}</span>
+      <span>{t('common.last_updated')}: {dateFmt.format(fm.last_reviewed_at)}</span>
+    </div>
+  </header>
+
+  {/* Inline disclosure — required above monetised content */}
+  <div class="mb-8">
+    <InlineDisclosure locale={locale} />
+  </div>
+
+  <div class="grid lg:grid-cols-[1fr_220px] gap-10 lg:gap-16 items-start">
+
+    <div class="min-w-0">
+      {has('hero')      && <ReviewHero    locale={locale} casino={casino} fm={fm} />}
+
+      {has('verdict')   && (
+        <QuickVerdict><slot name="verdict" /></QuickVerdict>
+      )}
+
+      {has('bonus')     && <BonusModule   locale={locale} casino={casino} fm={fm} />}
+
+      {has('games') && (
+        <ReviewSection id="games" heading="Games & software">
+          <slot name="games" />
+        </ReviewSection>
+      )}
+      {has('payments') && (
+        <ReviewSection id="payments" heading="Payments">
+          <slot name="payments" />
+        </ReviewSection>
+      )}
+      {has('mobile') && (
+        <ReviewSection id="mobile" heading="Mobile experience">
+          <slot name="mobile" />
+        </ReviewSection>
+      )}
+      {has('support') && (
+        <ReviewSection id="support" heading="Customer support">
+          <slot name="support" />
+        </ReviewSection>
+      )}
+      {has('license') && (
+        <ReviewSection id="license" heading="Licensing & security">
+          <slot name="license" />
+        </ReviewSection>
+      )}
+
+      {has('scoring')   && <ScoreBreakdown fm={fm} />}
+      {has('faq')       && <FAQModule fm={fm} />}
+      {has('final_cta') && <FinalCTA locale={locale} casino={casino} fm={fm} />}
+      {has('ugc')       && <UGCPlaceholder />}
+
+      {/* Default slot — any MDX content not assigned to a named slot */}
+      <div class="prose-vh text-bone leading-relaxed text-lg">
+        <slot />
+      </div>
+    </div>
+
+    <TOC fm={fm} headings={headings} />
+  </div>
+
+  {/* Affiliate-click telemetry — dev console for now, GA4 wiring later */}
+  <script>
+    document.querySelectorAll<HTMLAnchorElement>('[data-aff-click]').forEach((a) => {
+      a.addEventListener('click', () => {
+        const ev = {
+          link_id:   a.dataset.linkId,
+          casino:    a.dataset.casino,
+          page_type: a.dataset.pageType,
+          locale:    document.documentElement.lang,
+        };
+        if (import.meta.env.DEV) console.debug('[affiliate_click]', ev);
+      });
+    });
+  </script>
+</article>

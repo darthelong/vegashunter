@@ -1,0 +1,21 @@
+---
+/**
+ * Inline affiliate disclosure — drop above any ranking or above the CTA in
+ * a review. Required by ASA / FTC and beneficial for E-E-A-T.
+ *
+ * For Sprint 0 the long disclosure lives in the footer (always visible). This
+ * component is the *short* inline reminder that appears at the top of pages
+ * with monetised content. It links to the full disclosure for transparency.
+ */
+import { withLocale } from '@lib/i18n';
+import { type Locale } from '@lib/locales';
+
+export interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = withLocale(locale.code);
+---
+<aside class="border-l-2 border-ribbon pl-4 py-1 text-sm text-silver italic">
+  <p>
+    {t('footer.disclosure')}
+  </p>
+</aside>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 280" width="280" height="280" role="img" aria-label="VegasHunter mark">
+  <title>VegasHunter — mark</title>
+  <desc>Phosphor Ledger identity. A scope reticle (outer ring + cardinal hairlines), holding a magenta neon V and a centered bone-white pip.</desc>
+
+  <defs>
+    <!-- Magenta neon halo -->
+    <filter id="vh-glow" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="b1"/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="b2"/>
+      <feColorMatrix in="b2" type="matrix"
+        values="1 0 0 0 0
+                0 0 0 0 0
+                0 0 0 0 0
+                0 0 0 0.55 0" result="b2t"/>
+      <feMerge>
+        <feMergeNode in="b2t"/>
+        <feMergeNode in="b1"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Outer ring (scope frame / chip edge) -->
+  <circle cx="140" cy="140" r="125" fill="none" stroke="#00E5FF" stroke-width="2" opacity="0.95"/>
+  <!-- Inner subtle ring for double-line refinement -->
+  <circle cx="140" cy="140" r="118" fill="none" stroke="#00E5FF" stroke-width="0.6" opacity="0.35"/>
+
+  <!-- Cardinal reticle hairlines (do not touch center — clear bullseye) -->
+  <g stroke="#F2EDE0" stroke-width="1.4" opacity="0.78" stroke-linecap="square">
+    <line x1="140" y1="22"  x2="140" y2="50"/>
+    <line x1="140" y1="230" x2="140" y2="258"/>
+    <line x1="22"  y1="140" x2="50"  y2="140"/>
+    <line x1="230" y1="140" x2="258" y2="140"/>
+  </g>
+
+  <!-- 8-point chip-edge ticks at 45 deg multiples (very small, just outside inner ring) -->
+  <g stroke="#00E5FF" stroke-width="1" opacity="0.55">
+    <line x1="223.4" y1="56.6" x2="220.6" y2="59.4"/>
+    <line x1="56.6"  y1="56.6" x2="59.4"  y2="59.4"/>
+    <line x1="223.4" y1="223.4" x2="220.6" y2="220.6"/>
+    <line x1="56.6"  y1="223.4" x2="59.4"  y2="220.6"/>
+  </g>
+
+  <!-- The V — vertex bottom-center, arms reach up to scope corners, magenta with neon halation -->
+  <!-- far halo (wide, low-alpha bloom) -->
+  <path d="M 74 80 L 140 188 L 206 80"
+        fill="none" stroke="#FF5BA0" stroke-width="11"
+        stroke-linecap="round" stroke-linejoin="round"
+        opacity="0.45" filter="url(#vh-glow)"/>
+  <!-- core stroke -->
+  <path d="M 74 80 L 140 188 L 206 80"
+        fill="none" stroke="#FF2D7A" stroke-width="11"
+        stroke-linecap="round" stroke-linejoin="round"
+        filte

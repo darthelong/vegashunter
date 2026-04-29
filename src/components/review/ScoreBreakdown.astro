@@ -1,0 +1,41 @@
+---
+/** Module 9 — Score Breakdown. Per-category scores out of 10. */
+import type { ReviewFrontmatter } from '@lib/schemas';
+export interface Props { fm: ReviewFrontmatter }
+const { fm } = Astro.props;
+const categories: Array<[keyof ReviewFrontmatter['score_breakdown'], string]> = [
+  ['bonus',    'Bonus value'],
+  ['games',    'Games & software'],
+  ['payments', 'Payments'],
+  ['support',  'Support'],
+  ['mobile',   'Mobile experience'],
+  ['trust',    'Trust & licensing'],
+];
+---
+<section id="scoring" class="mb-12 scroll-mt-24">
+  <header class="mb-6">
+    <h2 class="font-display text-3xl text-bone">Score breakdown</h2>
+    <div class="rule with-tick mt-3 max-w-md"></div>
+  </header>
+
+  <div class="card divide-y divide-hairline">
+    {categories.map(([key, label]) => {
+      const v = fm.score_breakdown[key];
+      const pct = Math.max(0, Math.min(100, v * 10));
+      return (
+        <div class="grid grid-cols-[1fr_auto_120px] md:grid-cols-[1fr_auto_220px] items-center gap-4 px-5 py-3">
+          <span class="text-bone">{label}</span>
+          <span class="font-mono font-bold text-bone tabular-nums">{v.toFixed(1)}</span>
+          <div class="h-1 bg-twilight rounded-full overflow-hidden">
+            <div class="h-full bg-ribbon" style={`width:${pct}%`}></div>
+          </div>
+        </div>
+      );
+    })}
+    <div class="grid grid-cols-[1fr_auto_120px] md:grid-cols-[1fr_auto_220px] items-center gap-4 px-5 py-4 bg-twilight">
+      <span class="font-mono uppercase tracking-mono-caps text-xs text-silver">Overall</span>
+      <span class="font-mono font-bold text-bone tabular-nums text-2xl">{fm.score.toFixed(1)}</span>
+      <span class="text-mute font-mono text-xs uppercase tracking-mono-caps">/ 10.0</span>
+    </div>
+  </div>
+</section>

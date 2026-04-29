@@ -1,0 +1,65 @@
+---
+/**
+ * Cookie consent banner — DESIGNED but DISABLED via FLAGS.COOKIE_CONSENT_ENABLED.
+ *
+ * Sprint 0 ships this component as build-ready. We do not render it until any
+ * cookie-using script (GA4, pixels, embeds) is introduced, at which point we
+ * flip the flag and uncomment the storage logic below.
+ *
+ * Storage strategy when active:
+ *   - localStorage key 'vh.consent' = 'all' | 'minimal' | <undefined>
+ *   - Banner shows when undefined
+ *   - 'all' sets a flag the loader script reads to attach analytics
+ *   - 'minimal' lets only first-party functional cookies through (none today)
+ *
+ * Important: We DO NOT use localStorage in Astro artifacts/SSR. The script
+ * below runs only after hydration in the browser.
+ */
+import { withLocale } from '@lib/i18n';
+import { type Locale } from '@lib/locales';
+
+export interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = withLocale(locale.code);
+---
+<div id="cookie-consent"
+     class="fixed bottom-4 inset-x-4 md:inset-x-auto md:right-6 md:bottom-6 md:max-w-lg z-40
+            bg-twilight border border-hairline p-5 shadow-lg hidden"
+     role="dialog" aria-labelledby="cookie-heading" aria-describedby="cookie-body">
+  <h2 id="cookie-heading" class="mono-caps text-xs text-silver mb-2">
+    {t('cookie.heading')}
+  </h2>
+  <p id="cookie-body" class="text-sm text-bone mb-4 leading-relaxed">
+    {t('cookie.message')}
+  </p>
+  <div class="flex flex-wrap gap-3">
+    <button type="button" data-consent="all"
+            class="cta-pill text-xs">
+      {t('cookie.accept_all')}
+    </button>
+    <button type="button" data-consent="minimal"
+            class="font-body font-bold text-sm text-silver hover:text-bone">
+      {t('cookie.decline')}
+    </button>
+  </div>
+</div>
+
+<script>
+  // Active only when banner is rendered (i.e. flag enabled).
+  const banner = document.getElementById('cookie-consent');
+  if (banner) {
+    const KEY = 'vh.consent';
+    const stored = localStorage.getItem(KEY);
+    if (!stored) banner.classList.remove('hidden');
+
+    banner.querySelectorAll<HTMLButtonElement>('[data-consent]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const value = btn.dataset.consent ?? 'minimal';
+        localStorage.setItem(KEY, value);
+        banner.classList.add('hidden');
+        // When analytics is added, dispatch a CustomEvent here so the loader
+        // can react: window.dispatchEvent(new CustomEvent('vh.consent', { detail: value }))
+      });
+    });
+  }
+</script>

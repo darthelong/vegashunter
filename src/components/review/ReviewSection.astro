@@ -1,0 +1,34 @@
+---
+/** Shared shell for review modules whose body is provided by the MDX content. */
+export interface Props {
+  id: string;
+  heading: string;
+  /** Optional kicker (small caps mono above the heading) */
+  kicker?: string;
+}
+const { id, heading, kicker } = Astro.props;
+---
+<section id={id} class="mb-12 scroll-mt-24">
+  <header class="mb-6">
+    {kicker && (
+      <div class="font-mono uppercase tracking-mono-caps text-xs text-mute mb-2">{kicker}</div>
+    )}
+    <h2 class="font-display text-3xl text-bone">{heading}</h2>
+    <div class="rule with-tick mt-3 max-w-md"></div>
+  </header>
+  <div class="prose-vh text-bone leading-relaxed text-lg">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .prose-vh :global(p)         { margin-bottom: 1.25em; }
+  .prose-vh :global(h3)        { font-family: 'Gloock', Georgia, serif; font-size: 1.5rem; line-height: 1.3; margin-top: 1.6em; margin-bottom: 0.4em; }
+  .prose-vh :global(table)     { width: 100%; border-collapse: collapse; font-size: 0.95em; margin: 1em 0; }
+  .prose-vh :global(th)        { text-align: left; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.18em; font-size: 0.7em; color: #5F567A; padding: 0.6em 0.8em; border-bottom: 1px solid #2D2640; }
+  .prose-vh :global(td)        { padding: 0.6em 0.8em; border-bottom: 1px solid #2D2640; }
+  .prose-vh :global(ul)        { list-style: none; padding-left: 0; }
+  .prose-vh :global(ul li)     { padding-left: 1.5rem; position: relative; margin-bottom: 0.5em; }
+  .prose-vh :global(ul li::before) { content: '·'; color: #FF2D7A; position: absolute; left: 0.4rem; font-weight: bold; }
+  .prose-vh :global(a)         { color: #F4EFE2; text-decoration: underline; text-decoration-color: #FF2D7A; text-underline-offset: 4px; }
+</style>

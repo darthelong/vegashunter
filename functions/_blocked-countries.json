@@ -1,0 +1,10 @@
+{
+  "generatedAt": "2026-04-28T09:59:22.743636+00:00",
+  "source": "data/blocked-countries.yaml",
+  "codes": [
+    "PL",
+    "US",
+    "AU",
+    "FR"
+  ]
+}

@@ -1,0 +1,41 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import StaticPage from '@components/StaticPage.astro';
+import { allLocales, localeByCode, defaultLocale, SITE_URL } from '@lib/locales';
+import { withLocale } from '@lib/i18n';
+import { alternateHrefs } from '@lib/seo';
+
+export async function getStaticPaths() {
+  return allLocales().map((l) => ({ params: { locale: l.code } }));
+}
+
+const { locale: localeCode } = Astro.params;
+const locale = localeByCode(localeCode!) ?? defaultLocale();
+const t = withLocale(locale.code);
+const alternates = alternateHrefs((l) => `/${l.code}/responsible-gambling/`);
+---
+<BaseLayout
+  locale={locale.code}
+  title={`${t('page.responsible_gambling.heading')} — ${t('meta.site_name')}`}
+  description={t('page.responsible_gambling.lead')}
+  canonical={`${SITE_URL}/${locale.code}/responsible-gambling/`}
+  alternates={alternates}
+>
+  <StaticPage
+    heading={t('page.responsible_gambling.heading')}
+    lead={t('page.responsible_gambling.lead')}
+  >
+    <h2>Helplines</h2>
+    <ul>
+      <li><a href="https://www.begambleaware.org/" rel="noopener noreferrer external">BeGambleAware</a> — UK · 0808 8020 133</li>
+      <li><a href="https://www.gamcare.org.uk/" rel="noopener noreferrer external">GamCare</a> — UK · helpline & live chat</li>
+      <li><a href="https://www.gamblersanonymous.org/" rel="noopener noreferrer external">Gamblers Anonymous</a> — international</li>
+    </ul>
+
+    <h2>Set limits</h2>
+    <p>Most reputable casinos let you set deposit, loss, session and reality-check limits in your account settings. We list these capabilities in every review under "Licensing &amp; Security".</p>
+
+    <h2>Self-exclusion</h2>
+    <p>If you need to step away, every operator we cover is required by their licence to honour self-exclusion requests. National schemes such as <a href="https://www.gamstop.co.uk/" rel="noopener noreferrer external">GAMSTOP</a> (UK) cover all licensed operators in their jurisdiction.</p>
+  </StaticPage>
+</BaseLayout>

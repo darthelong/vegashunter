@@ -1,0 +1,83 @@
+---
+/**
+ * Review index — /{locale}/{review_segment}/
+ *
+ * Lists every review in the locale, most-recent first. Sprint 2 will add
+ * filter/sort UI and the home (= ranking) will eclipse this as the primary
+ * entry point. Keeping the page so internal links resolve.
+ */
+import type { GetStaticPaths } from 'astro';
+import { getCollection } from 'astro:content';
+
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { allLocales, localeByCode, defaultLocale, SITE_URL } from '@lib/locales';
+import { withLocale } from '@lib/i18n';
+import { alternateHrefs } from '@lib/seo';
+import { requireCasino } from '@lib/casinos';
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return allLocales().map((l) => ({
+    params: { locale: l.code, reviewPath: l.paths.reviews },
+  }));
+};
+
+const { locale: localeCode } = Astro.params;
+const locale = localeByCode(localeCode!) ?? defaultLocale();
+const t = withLocale(locale.code);
+
+const reviews = (await getCollection('reviews'))
+  .filter((r) => r.data.locale === locale.code)
+  .sort((a, b) => +b.data.published_at - +a.data.published_at);
+
+const path = `/${locale.code}/${locale.paths.reviews}/`;
+const alternates = alternateHrefs((l) => `/${l.code}/${l.paths.reviews}/`);
+---
+<BaseLayout
+  locale={locale.code}
+  title={`${t('nav.reviews')} — ${t('meta.site_name')}`}
+  description={t('meta.tagline')}
+  canonical={`${SITE_URL}${path}`}
+  alternates={alternates}
+>
+  <article class="max-w-screen-xl mx-auto px-6 lg:px-10 py-16">
+    <div class="flex items-center gap-4 mb-12">
+      <hr class="flex-1" />
+      <span class="department">VEGASHUNTER · {t('nav.reviews').toUpperCase()}</span>
+      <hr class="flex-1" />
+    </div>
+
+    <h1 class="font-display text-5xl md:text-6xl text-bone leading-tight">{t('nav.reviews')}</h1>
+    <div class="rule with-tick max-w-md mt-8 mb-10"></div>
+
+    {reviews.length === 0 ? (
+      <p class="font-editorial italic text-silver text-xl">
+        {t('placeholder.coming_soon')}
+      </p>
+    ) : (
+      <ul class="divide-y divide-hairline">
+        {reviews.map((r) => {
+          const c = requireCasino(r.data.casino);
+          const href = `/${locale.code}/${locale.paths.reviews}/${r.data.slug}/`;
+          return (
+            <li class="py-8 grid md:grid-cols-[80px_1fr_auto] items-center gap-6">
+              <img src={c.logo} alt=""
+                   class="w-20 h-20 object-contain bg-twilight border border-hairline rounded-sm" />
+              <div>
+                <a href={href} class="font-display text-3xl text-bone hover:underline decoration-ribbon underline-offset-4">
+                  {r.data.title}
+                </a>
+                <p class="font-editorial italic text-silver mt-2">{r.data.meta_description}</p>
+              </div>
+              <div class="text-right">
+                <div class="font-mono font-bold text-3xl text-bone tabular-nums">
+                  {r.data.score.toFixed(1)}
+                </div>
+                <div class="font-mono uppercase tracking-mono-caps text-xs text-mute">/ 10</div>
+              </div>
+            </li>
+          );
+        })}
+      </ul>
+    )}
+  </article>
+</BaseLayout>

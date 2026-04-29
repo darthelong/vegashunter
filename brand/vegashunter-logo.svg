@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 360" width="1400" height="360" role="img" aria-label="VegasHunter">
+  <title>VegasHunter — wordmark</title>
+  <desc>Press Ledger identity (v0.2). Gloock display serif wordmark, magenta tick under the masthead rule.</desc>
+
+  <!-- Wordmark -->
+  <text x="700" y="220"
+        text-anchor="middle"
+        font-family="Gloock, 'Times New Roman', serif"
+        font-weight="400"
+        font-size="220"
+        fill="#F4EFE2">VegasHunter</text>
+
+  <!-- Masthead rule with magenta tick at center -->
+  <g>
+    <line x1="240" y1="276" x2="1160" y2="276"
+          stroke="#2D2640" stroke-width="1.5"/>
+    <line x1="676" y1="276" x2="724" y2="276"
+          stroke="#FF2D7A" stroke-width="2.5"/>
+  </g>
+
+  <!-- Mono small caps tagline -->
+  <text x="700" y="318"
+        text-anchor="middle"
+        font-family="JetBrains Mono, monospace"
+        font-size="20"
+        letter-spacing="6"
+        fill="#B3AAC3">ONLINE  CASINOS  ·  HUNTED  AND  REVIEWED</text>
+</svg>

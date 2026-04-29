@@ -1,0 +1,47 @@
+---
+/** Module 2 — Quick Verdict. TL;DR + Pros/Cons. Pros/cons come from MDX body. */
+export interface Props {
+  pros?: string[];
+  cons?: string[];
+  /** Optional verdict line — usually the first paragraph of MDX body. */
+  tldr?: string;
+}
+const { pros = [], cons = [], tldr } = Astro.props;
+---
+<section id="verdict" class="mb-12 scroll-mt-24">
+  <header class="mb-6">
+    <h2 class="font-display text-3xl text-bone">Quick verdict</h2>
+    <div class="rule with-tick mt-3 max-w-md"></div>
+  </header>
+
+  {tldr && <p class="font-editorial italic text-xl text-silver leading-relaxed mb-6">{tldr}</p>}
+
+  {(pros.length > 0 || cons.length > 0) && (
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="card p-5">
+        <h3 class="font-mono uppercase tracking-mono-caps text-xs text-ivy mb-3">Pros</h3>
+        <ul class="space-y-2">
+          {pros.map((p) => (
+            <li class="flex gap-2 text-bone">
+              <span class="text-ivy" aria-hidden="true">+</span>
+              <span>{p}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div class="card p-5">
+        <h3 class="font-mono uppercase tracking-mono-caps text-xs text-crimson mb-3">Cons</h3>
+        <ul class="space-y-2">
+          {cons.map((c) => (
+            <li class="flex gap-2 text-bone">
+              <span class="text-crimson" aria-hidden="true">−</span>
+              <span>{c}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  )}
+
+  <slot />
+</section>

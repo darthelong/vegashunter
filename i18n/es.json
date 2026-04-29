@@ -1,0 +1,79 @@
+{
+  "meta.site_name": "VegasHunter",
+  "meta.tagline": "Casinos online, cazados y reseñados desde 2026.",
+
+  "nav.home": "Inicio",
+  "nav.reviews": "Reseñas",
+  "nav.rankings": "Rankings",
+  "nav.blog": "Blog",
+  "nav.about": "Sobre nosotros",
+  "nav.contact": "Contacto",
+  "nav.toggle_menu": "Alternar menú",
+
+  "header.skip_to_content": "Saltar al contenido principal",
+
+  "footer.disclosure": "VegasHunter se sostiene gracias a sus lectores. Podemos recibir una comisión cuando te registras en un casino a través de los enlaces de este sitio. Esto nunca afecta a nuestra puntuación o ranking editorial — cada veredicto es producto de observación independiente, nunca de colocación pagada.",
+  "footer.responsible_gambling": "Juego Responsable",
+  "footer.privacy_policy": "Política de Privacidad",
+  "footer.terms": "Términos de Servicio",
+  "footer.about": "Sobre nosotros",
+  "footer.contact": "Contacto",
+  "footer.methodology": "Metodología",
+  "footer.copyright": "© {year} VegasHunter. Todos los derechos reservados.",
+  "footer.languages": "Idiomas",
+  "footer.age_warning": "18+ — el juego puede ser adictivo. Juega con responsabilidad. Nunca apuestes más de lo que puedes permitirte perder.",
+
+  "common.read_more": "Leer más",
+  "common.read_review": "Leer la reseña",
+  "common.visit_casino": "Visitar casino",
+  "common.continue_reading": "Continuar leyendo",
+  "common.score": "Puntuación",
+  "common.bonus": "Bono",
+  "common.last_updated": "Última actualización",
+  "common.published": "Publicado",
+  "common.reviewed_by": "Reseñado por",
+  "common.min_read": "{min} min de lectura",
+
+  "region_blocked.heading": "Servicio no disponible en tu región",
+  "region_blocked.body": "VegasHunter no está disponible actualmente en tu país. Lamentamos las molestias. Si crees que esto es un error, por favor contáctanos.",
+  "region_blocked.detected_country": "País detectado: {country}",
+  "region_blocked.contact": "Contáctanos",
+
+  "cookie.message": "Utilizamos cookies para entender cómo usan VegasHunter los visitantes y mejorar nuestra cobertura editorial. Puedes aceptar todas, rechazar las no esenciales o abrir la configuración.",
+  "cookie.accept_all": "Aceptar todas",
+  "cookie.decline": "Rechazar las no esenciales",
+  "cookie.settings": "Configuración de cookies",
+  "cookie.heading": "Cookies en VegasHunter",
+
+  "rg.statement": "El juego implica riesgo. Si el juego ya no es divertido, tómate un descanso.",
+  "rg.helplines": "Líneas de ayuda: FEJAR (ES) · BeGambleAware · Gamblers Anonymous",
+
+  "placeholder.coming_soon": "Esta página estará disponible pronto.",
+  "placeholder.under_construction": "En construcción.",
+
+  "a11y.language_switcher": "Cambiar idioma",
+  "a11y.close": "Cerrar",
+  "a11y.menu": "Menú",
+
+  "error_404.heading": "Página no encontrada",
+  "error_404.body": "No se ha podido localizar la página que buscabas.",
+  "error_404.go_home": "Volver al inicio",
+
+  "page.about.heading": "Sobre VegasHunter",
+  "page.about.lead": "VegasHunter es un directorio editorial de casinos online. Cada puntuación es producto de observación paciente, nunca de colocación pagada.",
+
+  "page.contact.heading": "Contacto",
+  "page.contact.body": "Para consultas editoriales, propuestas de colaboración o comentarios, escríbenos a {email}.",
+
+  "page.methodology.heading": "Cómo puntuamos los casinos",
+  "page.methodology.lead": "Nuestro método de puntuación, las categorías que medimos, los pesos que aplicamos y las cosas que nos negamos a medir.",
+
+  "page.privacy.heading": "Política de Privacidad",
+  "page.privacy.body_placeholder": "Nuestra política de privacidad completa se publicará antes del lanzamiento. Hasta entonces, en este sitio no recopilamos datos personales más allá de los registros estándar del servidor.",
+
+  "page.terms.heading": "Términos de Servicio",
+  "page.terms.body_placeholder": "Nuestros términos de servicio completos se publicarán antes del lanzamiento.",
+
+  "page.responsible_gambling.heading": "Juego Responsable",
+  "page.responsible_gambling.lead": "El juego puede ser adictivo. Establece límites. Tómate descansos. Si necesitas ayuda, las líneas siguientes están disponibles 24/7."
+}

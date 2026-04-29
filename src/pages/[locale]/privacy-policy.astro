@@ -1,0 +1,27 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import StaticPage from '@components/StaticPage.astro';
+import { allLocales, localeByCode, defaultLocale, SITE_URL } from '@lib/locales';
+import { withLocale } from '@lib/i18n';
+import { alternateHrefs } from '@lib/seo';
+
+export async function getStaticPaths() {
+  return allLocales().map((l) => ({ params: { locale: l.code } }));
+}
+
+const { locale: localeCode } = Astro.params;
+const locale = localeByCode(localeCode!) ?? defaultLocale();
+const t = withLocale(locale.code);
+const alternates = alternateHrefs((l) => `/${l.code}/privacy-policy/`);
+---
+<BaseLayout
+  locale={locale.code}
+  title={`${t('page.privacy.heading')} — ${t('meta.site_name')}`}
+  description={t('page.privacy.body_placeholder')}
+  canonical={`${SITE_URL}/${locale.code}/privacy-policy/`}
+  alternates={alternates}
+>
+  <StaticPage heading={t('page.privacy.heading')}>
+    <p>{t('page.privacy.body_placeholder')}</p>
+  </StaticPage>
+</BaseLayout>
