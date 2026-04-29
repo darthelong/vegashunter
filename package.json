@@ -9,8 +9,8 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "predev":        "node scripts/build-blocked-countries.mjs && node scripts/build-sitemap.mjs",
-    "prebuild":      "node scripts/build-blocked-countries.mjs && node scripts/build-sitemap.mjs",
+    "predev":        "node scripts/build-blocked-countries.mjs && node scripts/build-locale-routing.mjs && node scripts/build-sitemap.mjs",
+    "prebuild":      "node scripts/build-blocked-countries.mjs && node scripts/build-locale-routing.mjs && node scripts/build-sitemap.mjs",
     "dev":           "astro dev",
     "build":         "astro check && astro build",
     "preview":       "astro preview",
@@ -19,6 +19,7 @@
     "format":        "prettier --write 'src/**/*.{astro,ts,tsx,md,mdx}'",
     "build:fonts":   "bash scripts/build-fonts.sh",
     "build:blocked": "node scripts/build-blocked-countries.mjs",
+    "build:routing": "node scripts/build-locale-routing.mjs",
     "build:sitemap": "node scripts/build-sitemap.mjs"
   },
   "dependencies": {

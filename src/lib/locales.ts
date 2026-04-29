@@ -31,6 +31,12 @@ const LocaleSchema = z.object({
   hreflang: z.string(),
   is_default: z.boolean().optional(),
   is_x_default: z.boolean().optional(),
+  /** Shown in the language switcher dropdown (5 base locales). Defaults true for back-compat. */
+  visible_in_switcher: z.boolean().default(true),
+  /** If this is a regional variant, which base locale does it cover (e.g. 'en-ca' → 'en'). */
+  regional_of: z.string().optional(),
+  /** ISO 3166-1 alpha-2 country codes that should be auto-redirected to this locale by the CF middleware. */
+  country_codes: z.array(z.string().length(2)).optional(),
   market_scope: z.string(),
   currency_default: z.string(),
   status: z.enum(['active', 'inactive']),
@@ -52,6 +58,33 @@ export const SITE_URL = 'https://vegashunter.pro';
 
 export function allLocales(): Locale[] {
   return LOCALES.filter((l) => l.status === 'active');
+}
+
+/**
+ * Locales visible in the language-switcher dropdown.
+ * Currently the 5 base languages (en, de, es, pt, ru). Regional variants
+ * (en-ca/gb/ie, es-ar/mx, pt-br) are reached automatically via the CF
+ * Pages middleware based on CF-IPCountry — never picked manually from
+ * the switcher.
+ */
+export function switcherLocales(): Locale[] {
+  return allLocales().filter((l) => l.visible_in_switcher !== false);
+}
+
+/**
+ * Country code → regional locale code map (e.g. { GB: 'en-gb', CA: 'en-ca' }).
+ * Built from `country_codes` declarations in data/locales.yaml.
+ * Used by the CF middleware to route GB visitors on /en/ to /en-gb/.
+ */
+export function regionalByCountry(): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const l of allLocales()) {
+    if (!l.country_codes) continue;
+    for (const cc of l.country_codes) {
+      out[cc.toUpperCase()] = l.code;
+    }
+  }
+  return out;
 }
 
 export function localeByCode(code: string): Locale | undefined {

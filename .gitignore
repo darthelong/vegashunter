@@ -43,3 +43,4 @@ tmp/
 
 # Pre-build generated files (regenerated every build, never committed)
 public/sitemap.xml
+functions/_locale-routing.json

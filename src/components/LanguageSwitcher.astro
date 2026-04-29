@@ -7,7 +7,7 @@
  * the equivalent URL when one exists, and a fallback to the locale homepage
  * when it doesn't (per docs §3.5).
  */
-import { allLocales, type Locale } from '@lib/locales';
+import { switcherLocales, type Locale } from '@lib/locales';
 import { withLocale } from '@lib/i18n';
 
 export interface Props {
@@ -18,7 +18,15 @@ export interface Props {
 }
 const { locale, variant = 'desktop', alternates = {} } = Astro.props;
 const t = withLocale(locale.code);
-const locales = allLocales();
+
+// Show only the 5 base languages (en, de, es, pt, ru). Regional variants
+// (en-ca, en-gb, en-ie, es-ar, es-mx, pt-br) are reached automatically via
+// the CF Pages middleware based on CF-IPCountry — see functions/_middleware.ts.
+const locales = switcherLocales();
+
+// If the user is currently on a regional variant, the switcher should still
+// highlight the right base entry (e.g. on /en-ca/ → "English" is active).
+const activeBaseCode = locale.regional_of ?? locale.code;
 ---
 <div class:list={[
   'language-switcher',
@@ -44,7 +52,7 @@ const locales = allLocales();
     ]}>
       {locales.map((l) => {
         const href = alternates[l.code] ?? `/${l.code}/`;
-        const active = l.code === locale.code;
+        const active = l.code === activeBaseCode;
         return (
           <li>
             <a href={href} hreflang={l.hreflang}

@@ -28,6 +28,12 @@
   Content-Type: application/xml; charset=utf-8
   Cache-Control: public, max-age=300, s-maxage=3600
 
+# Sitemap stylesheet — applied by Firefox/Chrome to render the XML as HTML
+# for human visitors. Bots ignore this and parse the XML directly.
+/sitemap.xsl
+  Content-Type: text/xsl; charset=utf-8
+  Cache-Control: public, max-age=3600
+
 # Keep robots.txt as text/plain explicitly for the same reason.
 /robots.txt
   Content-Type: text/plain; charset=utf-8

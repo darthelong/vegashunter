@@ -1,18 +1,27 @@
 # VegasHunter — locale registry (single source of truth)
 #
 # When adding a locale here, you MUST also:
-#   1. Add it to LOCALES + HREFLANG_MAP in astro.config.mjs
-#   2. Create i18n/{code}.json with ALL UI string keys
-#   3. Add review path segment in `paths.reviews` below
-#   4. Translate footer disclosure in `disclosure` below
+#   1. Create i18n/{code}.json with ALL UI string keys
+#   2. Add review path segment in `paths.reviews` below
+#   3. Translate footer disclosure (handled in i18n strings)
 #
 # Build will fail (Zod validation) if any of the above is missing.
+#
+# Switcher visibility model:
+#   - `visible_in_switcher: true`  → shown in the language dropdown (5 base languages)
+#   - `visible_in_switcher: false` → hidden, but still buildable + sitemap-indexed.
+#                                    Auto-activated for users from `country_codes`
+#                                    via the CF Pages middleware (regional redirect).
+#   - `regional_of`  → which base locale this is a regional variant of (used by
+#                      the middleware to know what to redirect /en/ → /en-ca/ etc.)
+#   - `country_codes`→ ISO 3166-1 alpha-2 codes that auto-redirect to this regional.
 
 - code: en
   name: English
   hreflang: en
   is_default: true
   is_x_default: true
+  visible_in_switcher: true
   market_scope: global
   currency_default: USD
   status: active
@@ -29,6 +38,9 @@
 - code: en-ca
   name: English (Canada)
   hreflang: en-CA
+  visible_in_switcher: false
+  regional_of: en
+  country_codes: [CA]
   market_scope: ca
   currency_default: CAD
   status: active
@@ -37,6 +49,9 @@
 - code: en-gb
   name: English (UK)
   hreflang: en-GB
+  visible_in_switcher: false
+  regional_of: en
+  country_codes: [GB]
   market_scope: gb
   currency_default: GBP
   status: active
@@ -45,6 +60,9 @@
 - code: en-ie
   name: English (Ireland)
   hreflang: en-IE
+  visible_in_switcher: false
+  regional_of: en
+  country_codes: [IE]
   market_scope: ie
   currency_default: EUR
   status: active
@@ -53,6 +71,7 @@
 - code: de
   name: Deutsch
   hreflang: de
+  visible_in_switcher: true
   market_scope: dach
   currency_default: EUR
   status: active
@@ -61,6 +80,7 @@
 - code: es
   name: Español
   hreflang: es
+  visible_in_switcher: true
   market_scope: es
   currency_default: EUR
   status: active
@@ -69,6 +89,9 @@
 - code: es-ar
   name: Español (Argentina)
   hreflang: es-AR
+  visible_in_switcher: false
+  regional_of: es
+  country_codes: [AR]
   market_scope: ar
   currency_default: ARS
   status: active
@@ -77,6 +100,9 @@
 - code: es-mx
   name: Español (México)
   hreflang: es-MX
+  visible_in_switcher: false
+  regional_of: es
+  country_codes: [MX]
   market_scope: mx
   currency_default: MXN
   status: active
@@ -85,6 +111,7 @@
 - code: pt
   name: Português
   hreflang: pt
+  visible_in_switcher: true
   market_scope: pt
   currency_default: EUR
   status: active
@@ -93,6 +120,9 @@
 - code: pt-br
   name: Português (Brasil)
   hreflang: pt-BR
+  visible_in_switcher: false
+  regional_of: pt
+  country_codes: [BR]
   market_scope: br
   currency_default: BRL
   status: active
@@ -101,6 +131,7 @@
 - code: ru
   name: Русский
   hreflang: ru
+  visible_in_switcher: true
   market_scope: ru-row
   currency_default: USD
   status: active
