@@ -38,22 +38,11 @@ export default defineConfig({
     format: 'directory',
   },
 
-  i18n: {
-    defaultLocale: 'en',
-    locales: LOCALES,
-    routing: {
-      prefixDefaultLocale: true,        // /en/, /de/, ... — never bare /
-      redirectToDefaultLocale: true,    // / -> /en/
-    },
-    fallback: {
-      'en-ca': 'en',
-      'en-gb': 'en',
-      'en-ie': 'en',
-      'es-ar': 'es',
-      'es-mx': 'es',
-      'pt-br': 'pt',
-    },
-  },
+  // Astro's built-in i18n integration is intentionally NOT used here.
+  // We handle [locale] routing ourselves via dynamic routes + getStaticPaths,
+  // because each locale has translated path segments (reviews → bewertungen,
+  // resenas, ...) which Astro's i18n fallback can't express. The /  → /en/
+  // redirect is handled by src/pages/index.astro.
 
   integrations: [
     tailwind({ applyBaseStyles: false }),
