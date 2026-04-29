@@ -20,3 +20,14 @@
 # Astro hashed assets — long cache
 /_astro/*
   Cache-Control: public, max-age=31536000, immutable
+
+# Sitemap — force application/xml so browsers render the XML tree.
+# (The global X-Content-Type-Options: nosniff prevents browsers from
+# auto-detecting MIME, so we set it explicitly.)
+/sitemap.xml
+  Content-Type: application/xml; charset=utf-8
+  Cache-Control: public, max-age=300, s-maxage=3600
+
+# Keep robots.txt as text/plain explicitly for the same reason.
+/robots.txt
+  Content-Type: text/plain; charset=utf-8
