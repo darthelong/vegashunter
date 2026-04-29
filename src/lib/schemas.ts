@@ -103,8 +103,8 @@ export const ReviewFrontmatterSchema = z.object({
   bonus:                BonusFrontmatterSchema,
   affiliate_link_id:    z.string().regex(/^[a-z0-9-]+$/),
   author:               z.string().min(1),
-  published_at:         z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
-  last_reviewed_at:     z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  published_at:         z.coerce.date(),
+  last_reviewed_at:     z.coerce.date(),
   modules_enabled:      z.array(ReviewModuleSchema).min(1),
   faq:                  z.array(FAQItemSchema).default([])
                           .refine((arr) => arr.length === 0 || arr.length >= 3, {
