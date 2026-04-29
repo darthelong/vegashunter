@@ -25,9 +25,9 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 const { locale: localeCode, slug } = Astro.params;
-const locale = localeByCode(localeCode!) ?? defaultLocale();
+const locale = localeByCode(String(localeCode)) ?? defaultLocale();
 const t = withLocale(locale.code);
-const author = requireAuthor(slug!);
+const author = requireAuthor(String(slug));
 
 const alternates = alternateHrefs((l) => `/${l.code}/authors/${author.slug}/`);
 

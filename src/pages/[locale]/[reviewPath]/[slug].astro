@@ -48,8 +48,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 const { locale: localeCode } = Astro.params;
-const { review } = Astro.props;
-const locale = localeByCode(localeCode!) ?? defaultLocale();
+const { review } = Astro.props as { review: CollectionEntry<'reviews'> };
+const locale = localeByCode(String(localeCode)) ?? defaultLocale();
 const t = withLocale(locale.code);
 
 const fm = review.data;

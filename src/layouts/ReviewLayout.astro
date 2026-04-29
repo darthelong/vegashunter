@@ -60,8 +60,8 @@ const prettyAuthor = (slug: string) =>
           {prettyAuthor(fm.author)}
         </a>
       </span>
-      <span>{t('common.published')}: {dateFmt.format(fm.published_at)}</span>
-      <span>{t('common.last_updated')}: {dateFmt.format(fm.last_reviewed_at)}</span>
+      <span>{t('common.published')}: {dateFmt.format(new Date(fm.published_at))}</span>
+      <span>{t('common.last_updated')}: {dateFmt.format(new Date(fm.last_reviewed_at))}</span>
     </div>
   </header>
 

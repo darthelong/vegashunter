@@ -22,7 +22,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 const { locale: localeCode } = Astro.params;
-const locale = localeByCode(localeCode!) ?? defaultLocale();
+const locale = localeByCode(String(localeCode)) ?? defaultLocale();
 const t = withLocale(locale.code);
 
 const reviews = (await getCollection('reviews'))
