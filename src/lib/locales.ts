@@ -9,12 +9,10 @@
 
 import { z } from 'zod';
 import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import { dirname, resolve } from 'node:path';
+import { resolve } from 'node:path';
 import { parse as parseYaml } from 'yaml';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const LOCALES_PATH = resolve(__dirname, '../../data/locales.yaml');
+const LOCALES_PATH = resolve(process.cwd(), 'data/locales.yaml');
 
 const LocalePathsSchema = z.object({
   reviews: z.string(),

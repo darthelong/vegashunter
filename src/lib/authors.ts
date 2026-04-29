@@ -3,14 +3,12 @@
  * Zod (AuthorSchema), exposes lookup helpers + the full Person JSON-LD.
  */
 import { readFileSync, readdirSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import { dirname, resolve } from 'node:path';
+import { resolve } from 'node:path';
 import { parse as parseYaml } from 'yaml';
 import { AuthorSchema, type Author } from './schemas';
 import { SITE_URL } from './locales';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const DIR = resolve(__dirname, '../../data/authors');
+const DIR = resolve(process.cwd(), 'data/authors');
 
 const AUTHORS = new Map<string, Author>();
 {

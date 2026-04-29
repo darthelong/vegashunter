@@ -6,8 +6,7 @@
  * error that includes the file path and the failing field.
  */
 import { readFileSync, readdirSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import { dirname, resolve } from 'node:path';
+import { resolve } from 'node:path';
 import { parse as parseYaml } from 'yaml';
 
 import {
@@ -17,8 +16,7 @@ import {
   type AffiliateLink,
 } from './schemas';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const DATA_DIR = resolve(__dirname, '../../data');
+const DATA_DIR = resolve(process.cwd(), 'data');
 
 // ---------- Casinos ----------
 const CASINOS: Map<string, Casino> = new Map();

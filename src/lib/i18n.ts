@@ -7,12 +7,10 @@
  */
 
 import { readFileSync, readdirSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import { dirname, resolve } from 'node:path';
+import { resolve } from 'node:path';
 import { allLocales, defaultLocale, type LocaleCode } from './locales';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const I18N_DIR = resolve(__dirname, '../../i18n');
+const I18N_DIR = resolve(process.cwd(), 'i18n');
 
 type StringsBundle = Record<string, string>;
 
