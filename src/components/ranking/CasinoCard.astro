@@ -1,0 +1,134 @@
+---
+/**
+ * Casino card — one row of a ranking. Shows:
+ *   - rank number (large, mono)
+ *   - logo
+ *   - brand name + score
+ *   - 2–3 atuty (top tags translated to readable strings)
+ *   - bonus highlight from the editorial review (if a review exists for this
+ *     casino × locale)
+ *   - 2 CTAs: "Visit Casino" (affiliate link) and "Read Review" (internal)
+ *   - PARTNER/FEATURED badge inline (E-E-A-T transparency)
+ *
+ * The card pulls editorial data (bonus, review URL) from the corresponding
+ * review if it exists; otherwise shows a "review coming soon" line.
+ */
+import type { Casino, ReviewFrontmatter, AffiliateLink, RankingPosition } from '@lib/schemas';
+import type { Locale } from '@lib/locales';
+import { withLocale } from '@lib/i18n';
+import { buildAffiliateUrl, affiliateLinkForCasinoLocale } from '@lib/casinos';
+import PartnerBadge from './PartnerBadge.astro';
+
+export interface Props {
+  locale: Locale;
+  casino: Casino;
+  position: RankingPosition;
+  /** The review frontmatter for this (casino × locale), if it exists. */
+  review?: { data: ReviewFrontmatter; slug: string };
+  /** Page slug used as `sub2` in the affiliate URL — usually the ranking slug. */
+  pageSlug: string;
+}
+const { locale, casino, position, review, pageSlug } = Astro.props;
+const t = withLocale(locale.code);
+
+// Resolve the right affiliate link for this (casino × locale)
+const link: AffiliateLink | undefined = affiliateLinkForCasinoLocale(casino.slug, locale.code);
+
+// Outbound URL with sub_id substitution (no clickid — network sets that)
+const visitHref = link
+  ? buildAffiliateUrl(link.id, { sub1: `ranking-${pageSlug}`, sub2: casino.slug })
+  : casino.website;
+
+// Review URL if we have one for this locale
+const reviewHref = review
+  ? `/${locale.code}/${locale.paths.reviews}/${review.slug}/`
+  : undefined;
+
+// 3 short atuty from tags. Translate via i18n keys (with fallback to raw tag).
+const labelForTag = (tag: string) => t(`tag.${tag}`) || tag.replace(/_/g, ' ');
+const atuty = casino.tags.slice(0, 3).map(labelForTag);
+
+const isFeatured = position.is_featured;
+---
+<article class:list={[
+  'card grid md:grid-cols-[64px_120px_1fr_auto] gap-6 p-6 items-center transition-colors',
+  isFeatured ? 'border-ribbon' : '',
+]}>
+
+  {/* Rank number */}
+  <div class:list={[
+    'font-mono font-bold tabular-nums text-3xl md:text-4xl text-bone leading-none',
+    isFeatured ? 'text-ribbon' : '',
+  ]}>
+    {String(position.position).padStart(2, '0')}
+  </div>
+
+  {/* Logo */}
+  <img src={casino.logo} alt={`${casino.brand_name} logo`}
+       class="w-24 h-24 object-contain bg-twilight border border-hairline rounded-sm" />
+
+  {/* Body */}
+  <div class="min-w-0">
+    <div class="flex flex-wrap items-baseline gap-3 mb-2">
+      <h3 class="font-display text-2xl md:text-3xl text-bone leading-tight">
+        {casino.brand_name}
+      </h3>
+      {(isFeatured || position.is_boosted) && (
+        <PartnerBadge featured={isFeatured} boosted={position.is_boosted} />
+      )}
+    </div>
+
+    {atuty.length > 0 && (
+      <ul class="flex flex-wrap gap-x-3 gap-y-1 mb-3 text-xs font-mono uppercase tracking-mono-caps text-silver">
+        {atuty.map((s) => (
+          <li class="flex items-center gap-1">
+            <span class="text-ribbon" aria-hidden="true">·</span>
+            <span>{s}</span>
+          </li>
+        ))}
+      </ul>
+    )}
+
+    {review ? (
+      <p class="text-sm text-silver">
+        <span class="font-mono uppercase tracking-mono-caps text-xs text-mute mr-2">
+          {t('common.bonus')}
+        </span>
+        <span class="text-bone font-bold">
+          {review.data.bonus.currency} {review.data.bonus.amount}
+          {review.data.bonus.free_spins ? ` + ${review.data.bonus.free_spins} FS` : ''}
+        </span>
+        <span class="ml-2 text-mute">· wagering {review.data.bonus.wagering}×</span>
+      </p>
+    ) : (
+      <p class="text-sm italic text-mute">{t('ranking.review_coming_soon')}</p>
+    )}
+  </div>
+
+  {/* Right column — score + CTAs */}
+  <div class="flex flex-col items-end gap-3 min-w-[180px]">
+    <div class="text-right">
+      <div class="font-mono font-bold tabular-nums text-3xl text-bone leading-none">
+        {position.final_score.toFixed(1)}
+      </div>
+      <div class="font-mono uppercase tracking-mono-caps text-xs text-mute mt-1">
+        / 10
+      </div>
+    </div>
+
+    <a href={visitHref}
+       target="_blank" rel="nofollow sponsored noopener"
+       class="cta-pill text-xs"
+       data-aff-click data-link-id={link?.id ?? ''}
+       data-casino={casino.slug} data-page-type={`ranking-${pageSlug}`}>
+      {t('common.visit_casino')} →
+    </a>
+
+    {reviewHref && (
+      <a href={reviewHref}
+         class="font-body text-sm text-bone border-b-2 border-ribbon pb-0.5 hover:bg-ribbon/10 transition-colors">
+        {t('common.read_review')} →
+      </a>
+    )}
+  </div>
+</article>

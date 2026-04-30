@@ -1,0 +1,111 @@
+---
+/**
+ * Tier 2 ranking route — /{locale}/rankings/{slug}/
+ *
+ * Note: docs §6.2 envisions Tier 2 longtail rankings at the root level
+ * (e.g. /en/best-mobile-casinos/). For Sprint 2 we ship them under
+ * /rankings/{slug}/ to avoid clashing with the static page list (about,
+ * contact, methodology, ...). Once we add Tier 2 content we'll consider
+ * promoting them to root-level paths with a redirect map.
+ *
+ * For Sprint 2 there are NO Tier 2 configs in data/rankings/ — this route
+ * just generates whatever exists. When PO adds e.g.
+ * data/rankings/en/best-mobile.yaml, /en/rankings/best-mobile/ appears.
+ */
+import type { GetStaticPaths } from 'astro';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import RankingLayout from '@components/ranking/RankingLayout.astro';
+import { allLocales, localeByCode, defaultLocale, SITE_URL } from '@lib/locales';
+import { withLocale } from '@lib/i18n';
+import { alternateHrefs, breadcrumbJsonLd, itemListJsonLd } from '@lib/seo';
+import { allActiveCasinos, allAffiliateLinks } from '@lib/casinos';
+import { rankingsForLocale, getRanking } from '@lib/rankings';
+import { computeRanking, buildEditorialMap } from '@lib/ranking';
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const out: Array<{ params: { locale: string; rankingSlug: string } }> = [];
+  for (const locale of allLocales()) {
+    for (const cfg of rankingsForLocale(locale.code)) {
+      if (cfg.slug === 'main') continue; // main is the homepage
+      if (cfg.tier !== 2) continue;
+      out.push({ params: { locale: locale.code, rankingSlug: cfg.slug } });
+    }
+  }
+  return out;
+};
+
+const { locale: localeCode, rankingSlug } = Astro.params;
+const locale = localeByCode(String(localeCode)) ?? defaultLocale();
+const t = withLocale(locale.code);
+const config = getRanking(locale.code, String(rankingSlug));
+if (!config) throw new Error(`Ranking not found: ${locale.code}/${rankingSlug}`);
+
+const allReviews = await getCollection('reviews');
+const reviewsThisLocale = allReviews.filter((r) => r.data.locale === locale.code);
+const reviewsByCasino = new Map<string, CollectionEntry<'reviews'>>();
+for (const r of reviewsThisLocale) reviewsByCasino.set(r.data.casino, r);
+
+const casinos = allActiveCasinos();
+const casinosBySlug = new Map(casinos.map((c) => [c.slug, c] as const));
+const editorialByCasino = buildEditorialMap(reviewsThisLocale, locale.code);
+
+const positions = computeRanking({
+  config,
+  locale,
+  candidates: casinos,
+  editorialByCasino,
+  affiliateLinks: allAffiliateLinks(),
+});
+
+const path = `/${locale.code}/rankings/${config.slug}/`;
+const url  = `${SITE_URL}${path}`;
+const alternates = alternateHrefs((l) => {
+  // Only emit alternates for locales that also have this ranking config
+  return getRanking(l.code, config.slug)
+    ? `/${l.code}/rankings/${config.slug}/`
+    : undefined;
+});
+
+const jsonLd = [
+  breadcrumbJsonLd([
+    { name: t('meta.site_name'), url: `${SITE_URL}/${locale.code}/` },
+    { name: t('nav.rankings'),   url: `${SITE_URL}/${locale.code}/` }, // links to home (= main ranking)
+    { name: config.title,        url },
+  ]),
+  itemListJsonLd({
+    url,
+    name: config.title,
+    items: positions.map((p) => {
+      const c = casinosBySlug.get(p.casino_slug);
+      const r = reviewsByCasino.get(p.casino_slug);
+      const reviewSlug = r ? (((r as any).slug as string)?.replace(/^[^/]+\//, '') ?? r.data.slug) : undefined;
+      const reviewHref = reviewSlug
+        ? `${SITE_URL}/${locale.code}/${locale.paths.reviews}/${reviewSlug}/`
+        : (c?.website ?? '');
+      return {
+        position: p.position,
+        name: c?.brand_name ?? p.casino_slug,
+        url: reviewHref,
+        score: p.final_score,
+      };
+    }),
+  }),
+];
+---
+<BaseLayout
+  locale={locale.code}
+  title={config.meta_title}
+  description={config.meta_description}
+  canonical={url}
+  alternates={alternates}
+  jsonLd={jsonLd}
+>
+  <RankingLayout
+    locale={locale}
+    config={config}
+    positions={positions}
+    casinosBySlug={casinosBySlug}
+    reviewsByCasino={reviewsByCasino}
+  />
+</BaseLayout>

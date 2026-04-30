@@ -1,0 +1,12 @@
+# Slotoro — Semrush traffic snapshot (manual export from public top list).
+# Refresh monthly. Optional — algorithm drops the `traffic` input from the
+# formula and renormalises the remaining 5 weights when this file is missing.
+#
+# Public source: https://www.semrush.com/website/top/global/gambling/
+
+domain: slotoro.com
+authority_score: 38           # 0–100, Semrush's authority metric
+organic_traffic: 145000       # estimated monthly organic visits
+ranking_keywords: 8400
+source_url: https://www.semrush.com/website/top/global/gambling/
+as_of: 2026-04-15

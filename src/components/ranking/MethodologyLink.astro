@@ -1,0 +1,20 @@
+---
+/**
+ * Small "How we scored this" link, anchored to the methodology page.
+ * Shown above + below every ranking. E-E-A-T critical: readers can audit
+ * the formula in plain language at any time.
+ */
+import { withLocale } from '@lib/i18n';
+import type { Locale } from '@lib/locales';
+
+export interface Props { locale: Locale }
+const { locale } = Astro.props;
+const t = withLocale(locale.code);
+---
+<a href={`/${locale.code}/methodology/`}
+   class="inline-flex items-center gap-2 font-mono uppercase tracking-mono-caps text-xs
+          text-silver hover:text-bone transition-colors">
+  <span class="inline-block w-3 h-px bg-ribbon" aria-hidden="true"></span>
+  {t('ranking.methodology_link')}
+  <span aria-hidden="true">→</span>
+</a>

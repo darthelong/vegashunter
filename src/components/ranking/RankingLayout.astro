@@ -1,0 +1,116 @@
+---
+/**
+ * RankingLayout — composes a single ranking page (Tier 1 home or Tier 2 longtail).
+ *
+ * Sections (top → bottom):
+ *   - Compact masthead (Press Ledger): department label + headline + tick + dek
+ *   - Inline disclosure (always above any commercial list)
+ *   - Methodology link (top + bottom)
+ *   - Ordered list of CasinoCard
+ *   - Empty-state slug if no casinos matched
+ */
+import type { CollectionEntry } from 'astro:content';
+import type { Casino, RankingConfig, RankingPosition } from '@lib/schemas';
+import type { Locale } from '@lib/locales';
+import { withLocale } from '@lib/i18n';
+import InlineDisclosure from '@components/InlineDisclosure.astro';
+import CasinoCard from './CasinoCard.astro';
+import MethodologyLink from './MethodologyLink.astro';
+
+export interface Props {
+  locale: Locale;
+  config: RankingConfig;
+  positions: RankingPosition[];
+  casinosBySlug: Map<string, Casino>;
+  reviewsByCasino: Map<string, CollectionEntry<'reviews'>>; // for this locale only
+}
+const { locale, config, positions, casinosBySlug, reviewsByCasino } = Astro.props;
+const t = withLocale(locale.code);
+
+const monthsLabel = new Intl.DateTimeFormat(locale.hreflang, { year: 'numeric', month: 'long' })
+  .format(new Date());
+---
+<section class="max-w-screen-xl mx-auto px-6 lg:px-10 py-16 lg:py-24">
+
+  {/* Department band — Press Ledger marker */}
+  <div class="flex items-center gap-4 mb-10">
+    <hr class="flex-1" />
+    <span class="department">
+      {(t('ranking.department') || 'EDITORIAL · BEST CASINOS').toUpperCase()} · {monthsLabel.toUpperCase()}
+    </span>
+    <hr class="flex-1" />
+  </div>
+
+  {/* Headline */}
+  <h1 class="font-display text-4xl md:text-headline leading-tight text-bone text-center max-w-3xl mx-auto">
+    {config.title}
+  </h1>
+
+  {/* Rule + magenta tick */}
+  <div class="rule with-tick max-w-md mx-auto mt-8 mb-10"></div>
+
+  {/* Italic dek (meta description doubles as a public lede here) */}
+  <p class="font-editorial italic text-xl text-silver leading-relaxed max-w-3xl mx-auto text-center">
+    {config.meta_description}
+  </p>
+
+  {/* Methodology link + counter */}
+  <div class="mt-10 flex flex-wrap items-center justify-between gap-4">
+    <MethodologyLink locale={locale} />
+    <span class="font-mono uppercase tracking-mono-caps text-xs text-mute">
+      {positions.length} {t('ranking.casinos_label')}
+    </span>
+  </div>
+
+  {/* Inline disclosure — always above commercial content */}
+  <div class="mt-6">
+    <InlineDisclosure locale={locale} />
+  </div>
+
+  {/* The list */}
+  <div class="mt-10 space-y-5">
+    {positions.length === 0 ? (
+      <p class="font-editorial italic text-xl text-silver text-center py-12">
+        {t('ranking.empty')}
+      </p>
+    ) : (
+      positions.map((p) => {
+        const casino = casinosBySlug.get(p.casino_slug);
+        if (!casino) return null;
+        const review = reviewsByCasino.get(p.casino_slug);
+        const reviewProp = review
+          ? { data: review.data, slug: (review as any).slug?.replace?.(/^[^/]+\//, '') ?? review.data.slug ?? '' }
+          : undefined;
+        return (
+          <CasinoCard
+            locale={locale}
+            casino={casino}
+            position={p}
+            review={reviewProp}
+            pageSlug={config.slug}
+          />
+        );
+      })
+    )}
+  </div>
+
+  {/* Methodology link footer */}
+  <div class="mt-12 pt-6 border-t border-hairline flex justify-center">
+    <MethodologyLink locale={locale} />
+  </div>
+
+  {/* Affiliate-click telemetry hook (same shape as ReviewLayout) */}
+  <script>
+    document.querySelectorAll<HTMLAnchorElement>('[data-aff-click]').forEach((a) => {
+      a.addEventListener('click', () => {
+        const ev = {
+          link_id:   a.dataset.linkId,
+          casino:    a.dataset.casino,
+          page_type: a.dataset.pageType,
+          locale:    document.documentElement.lang,
+        };
+        if (import.meta.env.DEV) console.debug('[affiliate_click]', ev);
+      });
+    });
+  </script>
+</section>

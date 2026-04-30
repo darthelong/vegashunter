@@ -1,4 +1,12 @@
 ---
+/**
+ * Methodology page — explains the ranking formula in plain language.
+ * Required reading for E-E-A-T signals (Google YMYL guidelines).
+ *
+ * Currently EN-only prose. Sprint 2 follow-up: native review of methodology
+ * copy per locale (DE/ES/PT/RU). For now non-EN locales render the same EN
+ * body until translations are done — flagged as Sprint 0+ TODO #2 in README.
+ */
 import BaseLayout from '@layouts/BaseLayout.astro';
 import StaticPage from '@components/StaticPage.astro';
 import { allLocales, localeByCode, defaultLocale, SITE_URL } from '@lib/locales';
@@ -10,7 +18,7 @@ export async function getStaticPaths() {
 }
 
 const { locale: localeCode } = Astro.params;
-const locale = localeByCode(localeCode!) ?? defaultLocale();
+const locale = localeByCode(String(localeCode)) ?? defaultLocale();
 const t = withLocale(locale.code);
 const alternates = alternateHrefs((l) => `/${l.code}/methodology/`);
 ---
@@ -22,6 +30,70 @@ const alternates = alternateHrefs((l) => `/${l.code}/methodology/`);
   alternates={alternates}
 >
   <StaticPage heading={t('page.methodology.heading')} lead={t('page.methodology.lead')}>
-    <p>{t('placeholder.under_construction')}</p>
+
+    <h2>What we measure</h2>
+    <p>
+      Every casino in a VegasHunter ranking is scored against six signals.
+      Each signal is a number from 0 to 10. The signals are weighted, summed,
+      and the result is the casino's <strong>final score</strong>.
+    </p>
+
+    <p>The signals:</p>
+    <ul>
+      <li><strong>Editorial score (30%)</strong> — our review's overall verdict, the product of patient observation across bonus terms, payouts, support response times, mobile experience and licence integrity.</li>
+      <li><strong>Competitor consensus (20%)</strong> — the weighted average of ratings published by AskGamblers, Casino.guru and Trustpilot. We only count sources that have actually rated the casino; missing sources never get imputed.</li>
+      <li><strong>Market fit (15%)</strong> — a heuristic check against the locale's market: native currency support, a localised regulator (where applicable), localised payment methods, mobile-first, fast payouts.</li>
+      <li><strong>Commercial value (15%)</strong> — the partner contract's CPA value, normalised to 0–10. Always disclosed inline via a "PARTNER" or "FEATURED" badge on the ranking card. Never hidden in a footnote.</li>
+      <li><strong>Traffic signal (10%)</strong> — log-normalised organic traffic from public Semrush data. Captures popularity in a way that doesn't let one extremely-trafficked operator monopolise the score.</li>
+      <li><strong>Recency (10%)</strong> — a linear decay over twelve months. A review last revisited eleven months ago scores roughly half what a review revisited last week scores. Forces the editorial flywheel to keep our verdicts current.</li>
+    </ul>
+
+    <h2>Missing data: dropped, never imputed</h2>
+    <p>
+      If a casino has no Semrush traffic export, no Trustpilot rating, or no
+      published review yet, we <em>drop</em> the missing input from the formula
+      for that casino and renormalise the remaining weights to sum to 1.0. New
+      operators with thin data are not penalised by zero-imputation; they're
+      simply judged on what we can verify. The audit file emitted with every
+      build records exactly which inputs each casino's position was based on.
+    </p>
+
+    <h2>Featured slots and boosts</h2>
+    <p>
+      Some ranking configurations <strong>pin</strong> casinos to the top
+      ("featured") or apply a small post-scoring multiplier ("boost").
+      Featured slots and boosted positions always carry a visible badge on
+      the casino card. We treat editorial transparency as a non-negotiable
+      part of E-E-A-T compliance: a reader who pays attention can tell
+      exactly when a partner relationship has lifted a result.
+    </p>
+
+    <h2>Per-locale weight overrides</h2>
+    <p>
+      Default weights (30/20/15/15/10/10) apply to most rankings, but each
+      ranking config can override them — DE rankings, for example, weight
+      market fit higher because German regulator nuance matters more, and
+      proportionally lower commercial value to avoid distorting expectations
+      in a market with strict advertising rules.
+    </p>
+
+    <h2>What we refuse to measure</h2>
+    <p>
+      We do not factor in any of the following: a casino's social-media
+      following; the prestige of its background imagery; whether the operator
+      has bought anyone in our team a drink at iGB; or any signal a casino
+      cannot improve by serving its players better.
+    </p>
+
+    <h2>Auditing the formula</h2>
+    <p>
+      Every change to weights, featured slots, or boosts goes through a
+      version-controlled pull request with a written reason field. The
+      methodology page is version-stamped (currently <strong>v1.0 — effective
+      April 2026</strong>) so readers can pin our claims to a specific moment
+      in time. If you spot a result that doesn't square with what you see,
+      <a href={`/${locale.code}/contact/`}>tell us</a> — we read every note.
+    </p>
+
   </StaticPage>
 </BaseLayout>

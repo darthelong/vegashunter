@@ -1,4 +1,4 @@
-# Affiliate links — referenced by id from review frontmatter.
+# Affiliate links — referenced by id from review frontmatter and ranking algo.
 # Edit url, swap network, deactivate — propagation is automatic.
 #
 # Template tokens in the URL are filled at request-render time:
@@ -6,20 +6,33 @@
 #   {sub2}    — page slug:    e.g. 'slotoro-bewertung'
 #   {clickid} — set by the affiliate network on redirect; we never fill this
 #
-# Sprint 1 ships placeholders. Replace with real network URLs when contracts
-# are signed and trackers are received from the Product Owner.
+# `cpa_value` (0–10): normalised commercial value used by the ranking algorithm
+# (`commercial` input). PO updates per partner contract. Higher = more attractive
+# from a revenue standpoint. Always disclosed via inline "PARTNER" badge on cards.
+#
+# `casino` links a row to a casino slug — the ranking algorithm uses this to
+# resolve the right link per (casino × locale).
+#
+# Sprint 1 placeholders. Replace with real network URLs + real CPA values when
+# contracts are signed and trackers are received from the Product Owner.
 
 - id: slotoro-de
+  casino: slotoro
   url: "https://track.example.com/click?campaign=slotoro&geo=de&sub1={sub1}&sub2={sub2}"
   notes: "DE deal · EUR · placeholder"
   active: true
+  cpa_value: 7.5
 
 - id: slotoro-en
+  casino: slotoro
   url: "https://track.example.com/click?campaign=slotoro&geo=en&sub1={sub1}&sub2={sub2}"
   notes: "EN/global · placeholder"
   active: true
+  cpa_value: 7.0
 
 - id: slotoro-mx
+  casino: slotoro
   url: "https://track.example.com/click?campaign=slotoro&geo=mx&sub1={sub1}&sub2={sub2}"
   notes: "MX deal · MXN · placeholder"
   active: true
+  cpa_value: 6.5

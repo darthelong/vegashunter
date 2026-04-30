@@ -78,3 +78,45 @@ export function breadcrumbJsonLd(items: Array<{ name: string; url: string }>) {
     })),
   };
 }
+
+/**
+ * ItemList JSON-LD for ranking pages. Each item points at the casino's review
+ * URL when available, otherwise at the casino's website. Carries the editorial
+ * `final_score` so search engines can surface our ranking signal.
+ */
+export function itemListJsonLd(input: {
+  url: string;
+  name: string;
+  items: Array<{
+    position: number;
+    name: string;          // casino brand name
+    url: string;           // canonical link (review preferred, else casino site)
+    score?: number;        // 0–10
+  }>;
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    url: input.url,
+    name: input.name,
+    numberOfItems: input.items.length,
+    itemListElement: input.items.map((it) => ({
+      '@type': 'ListItem',
+      position: it.position,
+      url: it.url,
+      name: it.name,
+      ...(it.score != null && {
+        item: {
+          '@type': 'Thing',
+          name: it.name,
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: it.score,
+            bestRating: 10,
+            ratingCount: 1, // editorial — when UGC ships in Sprint 4 we add user ratings here
+          },
+        },
+      }),
+    })),
+  };
+}

@@ -1,0 +1,34 @@
+# Tier 1 — main ranking for the EN locale (= homepage at /en/).
+#
+# Sprint 2 ships with placeholder data. Replace `featured` and `boost` once
+# real partner contracts and CPA values are in. The algorithm picks up new
+# entries automatically — no code changes needed when adding a casino.
+
+slug: main
+locale: en
+tier: 1
+title: "Best Online Casinos 2026"
+meta_title: "Best Online Casinos 2026 — VegasHunter Editorial Ranking"
+meta_description: >-
+  An editorial ranking of online casinos, weighted across our review,
+  trusted competitor consensus, market fit, traffic signals, recency and a
+  clearly disclosed commercial input. Updated regularly.
+
+# No required tags — main ranking covers all active casinos.
+required_tags: []
+optional_tags: []
+
+# Default weights (editorial 30 / competitors 20 / market_fit 15 / commercial 15 / traffic 10 / freshness 10)
+# Comment out to inherit defaults; enable + tune per-locale if needed.
+# weights:
+#   editorial: 0.30
+#   competitors: 0.20
+#   market_fit: 0.15
+#   commercial: 0.15
+#   traffic: 0.10
+#   freshness: 0.10
+
+featured: []   # casino slugs pinned to the top in this order
+boost: {}      # { casino_slug: multiplier } — applied post-scoring
+exclude: []    # casinos that must never appear here
+max_positions: 15

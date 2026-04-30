@@ -1,0 +1,29 @@
+# Tier 1 — Hauptranking für die DE-Locale (= Startseite auf /de/).
+
+slug: main
+locale: de
+tier: 1
+title: "Beste Online Casinos 2026"
+meta_title: "Beste Online Casinos 2026 — VegasHunter Redaktionelles Ranking"
+meta_description: >-
+  Ein redaktionelles Ranking von Online-Casinos, gewichtet aus unserer
+  Bewertung, vertrauenswürdiger Wettbewerbs-Übereinstimmung, Marktanpassung,
+  Traffic-Signalen, Aktualität und einem klar offengelegten kommerziellen Input.
+
+# Per-locale weights — for DACH we lift market_fit (regulator nuance matters more)
+# and lower commercial slightly to match editorial expectation.
+weights:
+  editorial:   0.30
+  competitors: 0.20
+  market_fit:  0.20
+  commercial:  0.10
+  traffic:     0.10
+  freshness:   0.10
+
+required_tags: []
+optional_tags: []
+
+featured: []
+boost: {}
+exclude: []
+max_positions: 15

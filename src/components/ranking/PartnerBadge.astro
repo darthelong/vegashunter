@@ -1,0 +1,27 @@
+---
+/**
+ * PARTNER / FEATURED disclosure badge — shown inline on a casino card when
+ * the slot is featured (always-top) or boosted (multiplier applied).
+ *
+ * Design: small magenta-bordered pill, mono caps, never aggressive. The brand
+ * commitment from Sprint 2 design doc: "every commercial uplift is disclosed
+ * inline, never hidden in a footnote."
+ */
+export interface Props {
+  /** "FEATURED" — slot pinned to the top by config. */
+  featured?: boolean;
+  /** "PARTNER" — boost multiplier applied. */
+  boosted?: boolean;
+}
+const { featured = false, boosted = false } = Astro.props;
+const label =
+  featured ? 'FEATURED'
+  : boosted  ? 'PARTNER'
+  : null;
+---
+{label && (
+  <span class="inline-flex items-center px-2 py-1 text-[10px] font-mono font-bold uppercase tracking-mono-caps
+               text-ribbon border border-ribbon rounded-sm leading-none">
+    {label}
+  </span>
+)}

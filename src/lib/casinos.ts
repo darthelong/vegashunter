@@ -83,6 +83,25 @@ export function requireAffiliateLink(id: string): AffiliateLink {
   if (!l) throw new Error(`Affiliate link "${id}" not found in data/affiliate-links.yaml`);
   return l;
 }
+/** All affiliate links (used by the ranking algorithm to look up cpa_value per casino). */
+export function allAffiliateLinks(): AffiliateLink[] {
+  return Array.from(LINKS.values());
+}
+/**
+ * Best affiliate link for a (casino × locale). Prefers a link whose id ends
+ * with `-{locale}` (e.g. slotoro-de). Falls back to the first active link
+ * for that casino. Returns undefined when no link exists at all.
+ */
+export function affiliateLinkForCasinoLocale(
+  casinoSlug: string,
+  localeCode: string,
+): AffiliateLink | undefined {
+  const forCasino = Array.from(LINKS.values()).filter(
+    (l) => l.casino === casinoSlug && l.active
+  );
+  if (forCasino.length === 0) return undefined;
+  return forCasino.find((l) => l.id.endsWith(`-${localeCode}`)) ?? forCasino[0];
+}
 
 /**
  * Build the final outbound URL for an affiliate CTA.

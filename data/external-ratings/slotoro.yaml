@@ -1,0 +1,28 @@
+# Slotoro — external ratings (manually copied from public sources).
+# Refresh weekly. The ranking algorithm averages these (weighted) into
+# the `competitors` input. Missing source = dropped from the average.
+#
+# All scores normalised to 0–10:
+#   - AskGamblers publishes 0–10 directly
+#   - Casino.guru publishes 0–10 directly (their "Safety Index" mapped to score)
+#   - Trustpilot publishes 1–5 → multiply by 2 to get 0–10
+
+casino: slotoro
+ratings:
+  - source: askgamblers
+    score: 8.4
+    url: https://www.askgamblers.com/online-casinos/reviews/slotoro-casino
+    reviews_count: 142
+    as_of: 2026-04-20
+
+  - source: casino-guru
+    score: 8.7
+    url: https://casino.guru/slotoro-casino-review
+    reviews_count: 89
+    as_of: 2026-04-20
+
+  - source: trustpilot
+    score: 7.6  # 3.8/5 doubled
+    url: https://www.trustpilot.com/review/slotoro.com
+    reviews_count: 312
+    as_of: 2026-04-20

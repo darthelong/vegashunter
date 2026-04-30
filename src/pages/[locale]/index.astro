@@ -1,69 +1,122 @@
 ---
 /**
- * Locale homepage — Sprint 0 placeholder.
+ * Locale homepage — Tier 1 main ranking when data/rankings/{locale}/main.yaml
+ * exists; otherwise falls back to the Press Ledger masthead placeholder.
  *
- * In Sprint 2 this becomes the main ranking page (home = ranking główny per
- * the architectural decision in docs §13.2). For now it's a typographic
- * placeholder establishing the masthead, the system, and the disclosure.
+ * The architectural decision (docs §13.2): home = ranking główny per locale.
+ * /en/ → "Best Online Casinos 2026" (global), /de/ → "Beste Online Casinos
+ * 2026", etc. Each locale gets its own ordering.
  */
+import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '@layouts/BaseLayout.astro';
-import InlineDisclosure from '@components/InlineDisclosure.astro';
-import { allLocales, localeByCode, defaultLocale, buildPath, SITE_URL } from '@lib/locales';
+import RankingLayout from '@components/ranking/RankingLayout.astro';
+import { allLocales, localeByCode, defaultLocale, SITE_URL } from '@lib/locales';
 import { withLocale } from '@lib/i18n';
-import { alternateHrefs } from '@lib/seo';
+import { alternateHrefs, breadcrumbJsonLd, itemListJsonLd } from '@lib/seo';
+import { allActiveCasinos, allAffiliateLinks } from '@lib/casinos';
+import { mainRankingFor } from '@lib/rankings';
+import { computeRanking, buildEditorialMap } from '@lib/ranking';
+import type { Casino } from '@lib/schemas';
 
 export async function getStaticPaths() {
   return allLocales().map((l) => ({ params: { locale: l.code } }));
 }
 
 const { locale: localeCode } = Astro.params;
-const locale = localeByCode(localeCode!) ?? defaultLocale();
+const locale = localeByCode(String(localeCode)) ?? defaultLocale();
 const t = withLocale(locale.code);
-
 const alternates = alternateHrefs((l) => `/${l.code}/`);
+const url = `${SITE_URL}/${locale.code}/`;
 
-const title = `${t('meta.site_name')} — ${t('meta.tagline')}`;
-const description = t('meta.tagline');
+const config = mainRankingFor(locale.code);
+
+// Defaults for the placeholder fallback path
+let title = `${t('meta.site_name')} — ${t('meta.tagline')}`;
+let description = t('meta.tagline');
+let jsonLd: unknown[] = [];
+
+// Ranking-path data (only populated when config exists)
+let positions: ReturnType<typeof computeRanking> = [];
+let casinosBySlug = new Map<string, Casino>();
+let reviewsByCasino = new Map<string, CollectionEntry<'reviews'>>();
+
+if (config) {
+  const allReviews = await getCollection('reviews');
+  const reviewsThisLocale = allReviews.filter((r) => r.data.locale === locale.code);
+  for (const r of reviewsThisLocale) reviewsByCasino.set(r.data.casino, r);
+
+  const casinos = allActiveCasinos();
+  casinosBySlug = new Map(casinos.map((c) => [c.slug, c] as const));
+
+  const editorialByCasino = buildEditorialMap(reviewsThisLocale, locale.code);
+  positions = computeRanking({
+    config,
+    locale,
+    candidates: casinos,
+    editorialByCasino,
+    affiliateLinks: allAffiliateLinks(),
+  });
+
+  title = config.meta_title;
+  description = config.meta_description;
+
+  jsonLd = [
+    breadcrumbJsonLd([{ name: t('meta.site_name'), url }]),
+    itemListJsonLd({
+      url,
+      name: config.title,
+      items: positions.map((p) => {
+        const c = casinosBySlug.get(p.casino_slug);
+        const r = reviewsByCasino.get(p.casino_slug);
+        const reviewSlug = r ? (((r as any).slug as string)?.replace(/^[^/]+\//, '') ?? r.data.slug) : undefined;
+        const reviewHref = reviewSlug
+          ? `${SITE_URL}/${locale.code}/${locale.paths.reviews}/${reviewSlug}/`
+          : (c?.website ?? '');
+        return {
+          position: p.position,
+          name: c?.brand_name ?? p.casino_slug,
+          url: reviewHref,
+          score: p.final_score,
+        };
+      }),
+    }),
+  ];
+}
 ---
 <BaseLayout
   locale={locale.code}
   title={title}
   description={description}
-  canonical={`${SITE_URL}/${locale.code}/`}
+  canonical={url}
   alternates={alternates}
+  jsonLd={jsonLd}
 >
-  <section class="max-w-screen-2xl mx-auto px-6 lg:px-10 py-20 md:py-28">
-    {/* Department label between rules */}
-    <div class="flex items-center gap-4 mb-10">
-      <hr class="flex-1" />
-      <span class="department">
-        ESTABLISHED 2026 · ISSUE NO. 01
-      </span>
-      <hr class="flex-1" />
-    </div>
-
-    {/* Wordmark */}
-    <h1 class="font-display text-[88px] md:text-[160px] leading-none text-center text-bone tracking-tight">
-      VegasHunter
-    </h1>
-
-    {/* Rule with magenta tick */}
-    <div class="rule with-tick mx-auto mt-6 max-w-2xl"></div>
-
-    {/* Italic tagline */}
-    <p class="font-editorial italic text-center text-silver text-xl md:text-2xl mt-8">
-      {t('meta.tagline')}
-    </p>
-
-    {/* Inline disclosure */}
-    <div class="max-w-3xl mx-auto mt-16">
-      <InlineDisclosure locale={locale} />
-    </div>
-
-    {/* Sprint 0 placeholder note */}
-    <div class="max-w-2xl mx-auto mt-16 text-center text-mute text-sm font-mono uppercase tracking-mono-caps">
-      <p>· {t('placeholder.under_construction')} ·</p>
-      <p class="mt-2">RANKING · COMING IN SPRINT 2</p>
-    </div>
-  </section>
+  {config ? (
+    <RankingLayout
+      locale={locale}
+      config={config}
+      positions={positions}
+      casinosBySlug={casinosBySlug}
+      reviewsByCasino={reviewsByCasino}
+    />
+  ) : (
+    <section class="max-w-screen-2xl mx-auto px-6 lg:px-10 py-20 md:py-28">
+      <div class="flex items-center gap-4 mb-10">
+        <hr class="flex-1" />
+        <span class="department">ESTABLISHED 2026 · ISSUE NO. 01</span>
+        <hr class="flex-1" />
+      </div>
+      <h1 class="font-display text-[88px] md:text-[160px] leading-none text-center text-bone tracking-tight">
+        VegasHunter
+      </h1>
+      <div class="rule with-tick mx-auto mt-6 max-w-2xl"></div>
+      <p class="font-editorial italic text-center text-silver text-xl md:text-2xl mt-8">
+        {t('meta.tagline')}
+      </p>
+      <div class="max-w-2xl mx-auto mt-16 text-center text-mute text-sm font-mono uppercase tracking-mono-caps">
+        <p>· {t('placeholder.under_construction')} ·</p>
+        <p class="mt-2">RANKING · COMING SOON</p>
+      </div>
+    </section>
+  )}
 </BaseLayout>
