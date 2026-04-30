@@ -12,8 +12,7 @@
 #   - `visible_in_switcher: false` → hidden, but still buildable + sitemap-indexed.
 #                                    Auto-activated for users from `country_codes`
 #                                    via the CF Pages middleware (regional redirect).
-#   - `regional_of`  → which base locale this is a regional variant of (used by
-#                      the middleware to know what to redirect /en/ → /en-ca/ etc.)
+#   - `regional_of`  → which base locale this is a regional variant of.
 #   - `country_codes`→ ISO 3166-1 alpha-2 codes that auto-redirect to this regional.
 
 - code: en
@@ -68,12 +67,45 @@
   status: active
   paths: { reviews: reviews, blog: blog, providers: providers, slots: slots, payment_methods: payment-methods, bonuses: bonuses, authors: authors, methodology: methodology }
 
+- code: en-us
+  name: English (US)
+  hreflang: en-US
+  visible_in_switcher: false
+  regional_of: en
+  country_codes: [US]
+  market_scope: us
+  currency_default: USD
+  status: active
+  paths: { reviews: reviews, blog: blog, providers: providers, slots: slots, payment_methods: payment-methods, bonuses: bonuses, authors: authors, methodology: methodology }
+
 - code: de
   name: Deutsch
   hreflang: de
   visible_in_switcher: true
   market_scope: dach
   currency_default: EUR
+  status: active
+  paths: { reviews: bewertungen, blog: blog, providers: anbieter, slots: spielautomaten, payment_methods: zahlungsmethoden, bonuses: boni, authors: autoren, methodology: methodologie }
+
+- code: de-at
+  name: Deutsch (Österreich)
+  hreflang: de-AT
+  visible_in_switcher: false
+  regional_of: de
+  country_codes: [AT]
+  market_scope: at
+  currency_default: EUR
+  status: active
+  paths: { reviews: bewertungen, blog: blog, providers: anbieter, slots: spielautomaten, payment_methods: zahlungsmethoden, bonuses: boni, authors: autoren, methodology: methodologie }
+
+- code: de-ch
+  name: Deutsch (Schweiz)
+  hreflang: de-CH
+  visible_in_switcher: false
+  regional_of: de
+  country_codes: [CH]
+  market_scope: ch
+  currency_default: CHF
   status: active
   paths: { reviews: bewertungen, blog: blog, providers: anbieter, slots: spielautomaten, payment_methods: zahlungsmethoden, bonuses: boni, authors: autoren, methodology: methodologie }
 

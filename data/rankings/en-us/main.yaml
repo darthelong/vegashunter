@@ -1,0 +1,36 @@
+# Tier 1 — main ranking for en-us (= /en-us/, served to US visitors).
+#
+# US market is fragmented per state. We list operators that EITHER hold a
+# US-state licence (NJ, MI, PA, etc.) OR accept US players from offshore
+# Curaçao/Anjouan licences. Per-state legality disclaimer goes in each
+# review's License section.
+#
+# 2026-04-29 — US lifted from geo-block to enable this ranking.
+
+slug: main
+locale: en-us
+tier: 1
+title: "Best Online Casinos in the US 2026"
+meta_title: "Best Online Casinos USA 2026 — VegasHunter Editorial Ranking"
+meta_description: >-
+  Editorial ranking of US-friendly online casinos. Weighted across our review,
+  competitor consensus, market fit (USD support, US-friendly payments), traffic
+  and recency. Per-state legality varies — see each review for details.
+
+required_tags: []
+optional_tags: []
+
+# US defaults — standard weighting; market_fit rewards USD + US-friendly
+# payment rails (cards, crypto), regulator fit per-state handled at review level.
+weights:
+  editorial:   0.30
+  competitors: 0.20
+  market_fit:  0.15
+  commercial:  0.15
+  traffic:     0.10
+  freshness:   0.10
+
+featured: []
+boost: {}
+exclude: []
+max_positions: 15

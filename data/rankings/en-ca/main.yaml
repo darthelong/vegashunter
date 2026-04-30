@@ -1,0 +1,30 @@
+# Tier 1 — main ranking for en-ca (= /en-ca/, served to Canadian visitors).
+# CAD currency, MGA / Curaçao / Kahnawake licences acceptable.
+
+slug: main
+locale: en-ca
+tier: 1
+title: "Best Online Casinos in Canada 2026"
+meta_title: "Best Online Casinos Canada 2026 — VegasHunter Editorial Ranking"
+meta_description: >-
+  Editorial ranking of Canadian-friendly online casinos, weighted across our
+  review, competitor consensus, market fit (CAD support, fast Interac
+  withdrawals), traffic and recency. Commercial input clearly disclosed.
+
+required_tags: []
+optional_tags: []
+
+# CA defaults — slightly higher commercial weight than UK (less regulator
+# pressure on advertising), but otherwise standard.
+weights:
+  editorial:   0.30
+  competitors: 0.20
+  market_fit:  0.15
+  commercial:  0.15
+  traffic:     0.10
+  freshness:   0.10
+
+featured: []
+boost: {}
+exclude: []
+max_positions: 15

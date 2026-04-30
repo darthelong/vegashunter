@@ -1,0 +1,34 @@
+# Tier 1 — Hauptranking für de-at (= /de-at/, für Besucher aus Österreich).
+#
+# Österreichischer Markt: Glücksspielgesetz / Bundesabgabenverordnung. Wir
+# listen sowohl AT-lizenzierte Anbieter (Win2day-Konkurrenz) als auch ausländisch
+# lizenzierte Operatoren, die AT-Spieler akzeptieren. Per-Anbieter-Legalitätshinweis
+# im License-Modul jeder Rezension.
+
+slug: main
+locale: de-at
+tier: 1
+title: "Beste Online Casinos in Österreich 2026"
+meta_title: "Beste Online Casinos Österreich 2026 — VegasHunter Ranking"
+meta_description: >-
+  Redaktionelles Ranking österreichfreundlicher Online-Casinos. Gewichtung aus
+  Bewertung, Wettbewerbs-Konsens, Marktanpassung (EUR, AT-Lizenz, Sepa-Auszahlungen),
+  Traffic und Aktualität. Kommerzielle Inputs werden offengelegt.
+
+required_tags: []
+optional_tags: []
+
+# AT defaults follow DACH pattern: market_fit lifted (regulator signal),
+# commercial muted to match editorial expectation in regulated market.
+weights:
+  editorial:   0.30
+  competitors: 0.20
+  market_fit:  0.20
+  commercial:  0.10
+  traffic:     0.10
+  freshness:   0.10
+
+featured: []
+boost: {}
+exclude: []
+max_positions: 15

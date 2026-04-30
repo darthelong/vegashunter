@@ -1,0 +1,32 @@
+# Tier 1 — main ranking for en-gb (= /en-gb/, served to UK visitors).
+#
+# UKGC market: regulator nuance matters. Lift market_fit, lower commercial.
+# featured / boost / exclude get populated as PO selects partner casinos.
+
+slug: main
+locale: en-gb
+tier: 1
+title: "Best Online Casinos in the UK 2026"
+meta_title: "Best Online Casinos UK 2026 — VegasHunter Editorial Ranking"
+meta_description: >-
+  Editorial ranking of UK-friendly online casinos, weighted across our review,
+  competitor consensus (AskGamblers · Casino.guru · Trustpilot), market fit,
+  traffic, recency and a clearly disclosed commercial input.
+
+required_tags: []
+optional_tags: []
+
+# UK-specific: regulator weight slightly higher (UKGC compliance signal),
+# commercial slightly lower (UK ad rules favour editorial trust).
+weights:
+  editorial:   0.30
+  competitors: 0.20
+  market_fit:  0.20
+  commercial:  0.10
+  traffic:     0.10
+  freshness:   0.10
+
+featured: []
+boost: {}
+exclude: []
+max_positions: 15

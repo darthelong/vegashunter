@@ -1,0 +1,35 @@
+# Tier 1 — Hauptranking für de-ch (= /de-ch/, für Besucher aus der Schweiz).
+#
+# Schweizer Markt: Eidgenössische Spielbankenkommission (ESBK) / Geldspielgesetz.
+# Inländisches Online-Spiel ist nur durch konzessionierte Schweizer Spielbanken
+# zulässig — Offshore-Operatoren sind ESBK-formal nicht erlaubt, in der Praxis aber
+# zugänglich. Wir listen Anbieter, die CHF unterstützen und CH-Spieler akzeptieren,
+# mit transparentem Lizenz-Disclaimer im License-Modul jeder Rezension.
+
+slug: main
+locale: de-ch
+tier: 1
+title: "Beste Online Casinos in der Schweiz 2026"
+meta_title: "Beste Online Casinos Schweiz 2026 — VegasHunter Ranking"
+meta_description: >-
+  Redaktionelles Ranking schweiztauglicher Online-Casinos. Gewichtung aus
+  Bewertung, Wettbewerbs-Konsens, Marktanpassung (CHF, Twint, KYC), Traffic und
+  Aktualität. Kommerzielle Inputs offengelegt; Lizenz-Hinweis pro Anbieter.
+
+required_tags: []
+optional_tags: []
+
+# CH defaults follow DACH pattern. Market_fit rewards CHF support + Swiss-friendly
+# payment rails (Twint, postcard, etc.).
+weights:
+  editorial:   0.30
+  competitors: 0.20
+  market_fit:  0.20
+  commercial:  0.10
+  traffic:     0.10
+  freshness:   0.10
+
+featured: []
+boost: {}
+exclude: []
+max_positions: 15
